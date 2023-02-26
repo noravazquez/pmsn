@@ -107,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final btnPhoto = InkWell(
       onTap: () {
-        _showSelectionDialog(context);
+        showSelectionDialog(context);
       },
       child: Icon(
         Icons.add_a_photo,
@@ -177,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _showSelectionDialog(context) {
+  void showSelectionDialog(context) {
     showDialog(
         context: context,
         builder: (BuildContext) {
