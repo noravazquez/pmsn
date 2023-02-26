@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (value == null || value.isEmpty) {
           return 'Please enter a password';
         } else if (!validateStructure(value)) {
-          return 'Enter valid password';
+          return 'Please enter valid password';
         } else {
           return null;
         }
