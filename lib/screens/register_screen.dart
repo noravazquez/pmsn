@@ -125,9 +125,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Container(
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    opacity: 0.5,
+                    opacity: 0.7,
                     fit: BoxFit.cover,
-                    image: AssetImage('assets/fondo.png'))),
+                    image: AssetImage('assets/fondo_pantalla.png'))),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Stack(
