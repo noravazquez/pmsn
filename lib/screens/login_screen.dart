@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/widgets/loading_modal_widget.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
@@ -31,10 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final btnGithub = SocialLoginButton(
       buttonType: SocialLoginButtonType.github, onPressed: () {});
 
-  final imageLogo = Image.asset(
-    'assets/logo.png',
-    height: 200,
-  );
+  final imageLogo = Image.asset('assets/logo.png');
 
   @override
   Widget build(BuildContext context) {
@@ -76,27 +74,52 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      txtEmail,
-                      spaceHorizontal,
-                      txtPassword,
-                      spaceHorizontal,
-                      btnEmail,
-                      spaceHorizontal,
-                      btnGoogle,
-                      spaceHorizontal,
-                      btnFacebook,
-                      spaceHorizontal,
-                      btnGithub,
-                      spaceHorizontal,
-                      txtRegister
-                    ],
-                  ),
-                  Positioned(
-                    top: 100,
-                    child: imageLogo,
+                  Responsive(
+                    mobile: MobileLoginScreen(
+                        spaceHorizontal: spaceHorizontal,
+                        txtEmail: txtEmail,
+                        txtPassword: txtPassword,
+                        btnEmail: btnEmail,
+                        btnGoogle: btnGoogle,
+                        btnFacebook: btnFacebook,
+                        btnGithub: btnGithub,
+                        txtRegister: txtRegister),
+                    desktop: Row(
+                      children: [
+                        Expanded(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                                width: 450,
+                                child: Stack(
+                                  alignment: Alignment.topCenter,
+                                  children: [
+                                    Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          LogoImage(),
+                                          txtEmail,
+                                          spaceHorizontal,
+                                          txtPassword,
+                                          spaceHorizontal,
+                                          btnEmail,
+                                          spaceHorizontal,
+                                          btnGoogle,
+                                          spaceHorizontal,
+                                          btnFacebook,
+                                          spaceHorizontal,
+                                          btnGithub,
+                                          spaceHorizontal,
+                                          txtRegister
+                                        ])
+                                  ],
+                                ))
+                          ],
+                        ))
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -105,6 +128,85 @@ class _LoginScreenState extends State<LoginScreen> {
           isLoading ? const LoadingModalWidget() : Container()
         ],
       ),
+    );
+  }
+}
+
+class MobileLoginScreen extends StatelessWidget {
+  const MobileLoginScreen({
+    super.key,
+    required this.spaceHorizontal,
+    required this.txtEmail,
+    required this.txtPassword,
+    required this.btnEmail,
+    required this.btnGoogle,
+    required this.btnFacebook,
+    required this.btnGithub,
+    required this.txtRegister,
+  });
+
+  final SizedBox spaceHorizontal;
+  final TextFormField txtEmail;
+  final TextFormField txtPassword;
+  final SocialLoginButton btnEmail;
+  final SocialLoginButton btnGoogle;
+  final SocialLoginButton btnFacebook;
+  final SocialLoginButton btnGithub;
+  final Padding txtRegister;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        LogoImage(),
+        txtEmail,
+        spaceHorizontal,
+        txtPassword,
+        spaceHorizontal,
+        btnEmail,
+        spaceHorizontal,
+        btnGoogle,
+        spaceHorizontal,
+        btnFacebook,
+        spaceHorizontal,
+        btnGithub,
+        spaceHorizontal,
+        txtRegister
+      ],
+    );
+  }
+}
+
+class LogoImage extends StatelessWidget {
+  const LogoImage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          "Login",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 15.0),
+        Row(
+          children: [
+            Spacer(),
+            Expanded(
+                flex: 8,
+                child: Image.asset(
+                  "assets/logo.png",
+                  width: 160,
+                  height: 160,
+                )),
+            Spacer()
+          ],
+        ),
+        SizedBox(height: 10.0),
+      ],
     );
   }
 }

@@ -139,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           CircleAvatar(
-                            radius: 95.0,
+                            radius: 80.0,
                             backgroundImage: _imageFile == null
                                 ? photo
                                 : Image.file(File(_imageFile!.path.toString()))
@@ -162,10 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           spaceHorizontal,
                           btnGoogle,
                           spaceHorizontal,
-                          txtLogin,
-                          SizedBox(
-                            height: 90,
-                          )
+                          txtLogin
                         ],
                       )),
                 ],
