@@ -199,8 +199,8 @@ class LogoImage extends StatelessWidget {
                 flex: 8,
                 child: Image.asset(
                   "assets/logo.png",
-                  width: 160,
-                  height: 160,
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  height: MediaQuery.of(context).size.height * 0.2,
                 )),
             Spacer()
           ],
