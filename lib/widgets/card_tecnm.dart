@@ -23,6 +23,12 @@ class CardTec extends StatelessWidget {
   final CardTecnm data;
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(
+      children: [
+        Image(image: data.image),
+        Text(data.title.toUpperCase()),
+        Text(data.subtitle)
+      ],
+    );
   }
 }

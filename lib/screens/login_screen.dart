@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/widgets/loading_modal_widget.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
@@ -17,10 +18,12 @@ class _LoginScreenState extends State<LoginScreen> {
     decoration: const InputDecoration(
         label: Text('Email user'), border: OutlineInputBorder()),
   );
+
   final txtPassword = TextFormField(
     decoration: const InputDecoration(
         label: Text('Password user'), border: OutlineInputBorder()),
   );
+
   final spaceHorizontal = SizedBox(
     height: 10,
   );
@@ -48,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: TextDecoration.underline,
                   color: Colors.blueGrey))),
     );
+
     final btnEmail = SocialLoginButton(
         buttonType: SocialLoginButtonType.generalLogin,
         onPressed: () {
@@ -59,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushNamed(context, '/dash');
           });
         });
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -84,42 +89,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         btnFacebook: btnFacebook,
                         btnGithub: btnGithub,
                         txtRegister: txtRegister),
-                    desktop: Row(
-                      children: [
-                        Expanded(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                width: 450,
-                                child: Stack(
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          LogoImage(),
-                                          txtEmail,
-                                          spaceHorizontal,
-                                          txtPassword,
-                                          spaceHorizontal,
-                                          btnEmail,
-                                          spaceHorizontal,
-                                          btnGoogle,
-                                          spaceHorizontal,
-                                          btnFacebook,
-                                          spaceHorizontal,
-                                          btnGithub,
-                                          spaceHorizontal,
-                                          txtRegister
-                                        ])
-                                  ],
-                                ))
-                          ],
-                        ))
-                      ],
-                    ),
+                    tablet: TabletDesktopScreen(
+                        spaceHorizontal: spaceHorizontal,
+                        txtEmail: txtEmail,
+                        txtPassword: txtPassword,
+                        btnEmail: btnEmail,
+                        btnGoogle: btnGoogle,
+                        btnFacebook: btnFacebook,
+                        btnGithub: btnGithub,
+                        txtRegister: txtRegister),
+                    desktop: TabletDesktopScreen(
+                        spaceHorizontal: spaceHorizontal,
+                        txtEmail: txtEmail,
+                        txtPassword: txtPassword,
+                        btnEmail: btnEmail,
+                        btnGoogle: btnGoogle,
+                        btnFacebook: btnFacebook,
+                        btnGithub: btnGithub,
+                        txtRegister: txtRegister),
                   )
                 ],
               ),
@@ -178,6 +165,71 @@ class MobileLoginScreen extends StatelessWidget {
   }
 }
 
+class TabletDesktopScreen extends StatelessWidget {
+  const TabletDesktopScreen({
+    super.key,
+    required this.spaceHorizontal,
+    required this.txtEmail,
+    required this.txtPassword,
+    required this.btnEmail,
+    required this.btnGoogle,
+    required this.btnFacebook,
+    required this.btnGithub,
+    required this.txtRegister,
+  });
+
+  final SizedBox spaceHorizontal;
+  final TextFormField txtEmail;
+  final TextFormField txtPassword;
+  final SocialLoginButton btnEmail;
+  final SocialLoginButton btnGoogle;
+  final SocialLoginButton btnFacebook;
+  final SocialLoginButton btnGithub;
+  final Padding txtRegister;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [LogoImage(), spaceHorizontal, txtRegister],
+        )),
+        SizedBox(
+          height: 10,
+        ),
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 450,
+              child: Column(children: [
+                txtEmail,
+                spaceHorizontal,
+                txtPassword,
+                spaceHorizontal,
+                btnEmail,
+                spaceHorizontal,
+                btnGoogle,
+                spaceHorizontal,
+                btnFacebook,
+                spaceHorizontal,
+                btnGithub,
+              ]),
+            )
+          ],
+        ))
+      ],
+    );
+  }
+}
+
 class LogoImage extends StatelessWidget {
   const LogoImage({
     super.key,
@@ -187,21 +239,10 @@ class LogoImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          "Login",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 15.0),
         Row(
           children: [
             Spacer(),
-            Expanded(
-                flex: 8,
-                child: Image.asset(
-                  "assets/logo.png",
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  height: MediaQuery.of(context).size.height * 0.2,
-                )),
+            Expanded(child: Image.asset("assets/logo.png")),
             Spacer()
           ],
         ),

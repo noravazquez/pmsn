@@ -187,7 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onTap: () {
                       selectOpction(context, ImageSource.camera);
                     },
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.camera,
                       color: Colors.blueGrey,
                     ),
@@ -197,7 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onTap: () {
                       selectOpction(context, ImageSource.gallery);
                     },
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.image,
                       color: Colors.blueGrey,
                     ),
