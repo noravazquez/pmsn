@@ -12,7 +12,7 @@ class OnBoardingPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(20),
       color: model.bgColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -36,7 +36,7 @@ class OnBoardingPageWidget extends StatelessWidget {
           ),
           Text(model.counterText),
           SizedBox(
-            height: 50.0,
+            height: 80.0,
           )
         ],
       ),
