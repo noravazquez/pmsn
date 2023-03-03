@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
+import 'package:lottie/lottie.dart';
 import 'package:primer_proyecto/models/model_on_boarding.dart';
 import 'package:primer_proyecto/widgets/on_boarding_page_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -23,13 +24,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     final pages = [
       OnBoardingPageWidget(
           model: OnBoardingModel(
-              image: "assets/onboarding1.png",
-              title: "TECNM en Celaya",
-              subtitle:
-                  "Somos una Institución de Educación Superior, consolidada en la Región Laja-Bajío del Estado de Guanajuato, con oferta educativa a nivel profesional, maestrías y doctorados.",
-              counterText: "1/4",
-              bgColor: Color.fromRGBO(11, 23, 7, 1),
-              height: size.height)),
+        image: "assets/onboarding1.png",
+        title: "TECNM en Celaya",
+        subtitle:
+            "Somos una Institución de Educación Superior, consolidada en la Región Laja-Bajío del Estado de Guanajuato, con oferta educativa a nivel profesional, maestrías y doctorados.",
+        counterText: "1/4",
+        bgColor: Color.fromRGBO(11, 23, 7, 1),
+        height: size.height,
+        background: LottieBuilder.network(
+            "https://assets2.lottiefiles.com/packages/lf20_iomkzwwh.json"),
+      )),
       OnBoardingPageWidget(
           model: OnBoardingModel(
               image: "assets/onboarding2.png",

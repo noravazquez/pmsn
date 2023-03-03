@@ -7,6 +7,7 @@ class OnBoardingModel {
   final String counterText;
   final Color bgColor;
   final double height;
+  final Widget? background;
 
   OnBoardingModel(
       {required this.image,
@@ -14,5 +15,6 @@ class OnBoardingModel {
       required this.subtitle,
       required this.counterText,
       required this.bgColor,
-      required this.height});
+      required this.height,
+      this.background});
 }
