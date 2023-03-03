@@ -9,8 +9,8 @@ class OnboardingScreen extends StatelessWidget {
     CardTecnm(
         title: "Page 1",
         subtitle: "Subtitulo 1",
-        image: AssetImage("assets/onboarding1.jpg"),
-        backgroundColor: Color.fromRGBO(17, 34, 11, 1),
+        image: AssetImage("assets/onboarding1.png"),
+        backgroundColor: Color.fromRGBO(11, 27, 7, 1),
         titleColor: Colors.pink,
         subtitleColor: Colors.white),
     CardTecnm(
