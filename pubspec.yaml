@@ -44,6 +44,8 @@ dependencies:
   email_validator: ^2.1.17
   concentric_transition: ^1.0.3
   google_fonts: ^4.0.3
+  liquid_swipe: ^3.0.0
+  smooth_page_indicator: ^1.0.1
 
 dev_dependencies:
   flutter_test:
