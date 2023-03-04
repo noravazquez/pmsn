@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:primer_proyecto/provider/them_provider.dart';
 import 'package:primer_proyecto/routes.dart';
+import 'package:primer_proyecto/screens/login_screen.dart';
 import 'package:primer_proyecto/screens/on_boarging_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class PMSNApp extends StatelessWidget {
     return MaterialApp(
       theme: theme.getthemeData(),
       routes: getApplicationRoutes(),
-      home: OnBoardingScreen(),
+      home: LoginScreen(),
     );
   }
 }
