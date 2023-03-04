@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/widgets/loading_modal_widget.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
@@ -78,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
+                  Positioned(top: 20, child: Lottie.asset('a')),
                   Responsive(
                     mobile: MobileLoginScreen(
                         spaceHorizontal: spaceHorizontal,
