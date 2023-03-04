@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:lottie/lottie.dart';
+import 'package:primer_proyecto/models/model_onboarding.dart';
 import 'package:primer_proyecto/widgets/on_boarding_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -16,42 +17,46 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   int currentPage = 0;
 
   final pages = [
-    CardData(
-        title: '',
-        subtitle: '',
-        counterText: '',
-        image: AssetImage(''),
-        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
-        titleColor: Color.fromRGBO(229, 235, 210, 1),
-        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
-        background: ''),
-    CardData(
-        title: '',
-        subtitle: '',
-        counterText: '',
-        image: AssetImage(''),
-        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
-        titleColor: Color.fromRGBO(229, 235, 210, 1),
-        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
-        background: ''),
-    CardData(
-        title: '',
-        subtitle: '',
-        counterText: '',
-        image: AssetImage(''),
-        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
-        titleColor: Color.fromRGBO(229, 235, 210, 1),
-        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
-        background: ''),
-    CardData(
-        title: '',
-        subtitle: '',
-        counterText: '',
-        image: AssetImage(''),
-        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
-        titleColor: Color.fromRGBO(229, 235, 210, 1),
-        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
-        background: '')
+    OnBoardingPageWidget(
+        model: OnBoardingModel(
+            title: 'Pagina 1',
+            subtitle: 'Subtitulo 1',
+            counterText: '1/4',
+            image: AssetImage("assets/onboarding1.png"),
+            backgroundColor: Colors.black,
+            titleColor: Colors.white,
+            subtitleColor: Colors.amber,
+            background: 'assets/bubbles-lottie-animation.json')),
+    OnBoardingPageWidget(
+        model: OnBoardingModel(
+            title: 'Pagina 2',
+            subtitle: 'Subtitulo 2',
+            counterText: '2/4',
+            image: AssetImage("assets/onboarding1.png"),
+            backgroundColor: Colors.red,
+            titleColor: Colors.white,
+            subtitleColor: Colors.amber,
+            background: 'assets/bubbles-lottie-animation.json')),
+    OnBoardingPageWidget(
+        model: OnBoardingModel(
+            title: 'Pagina 3',
+            subtitle: 'Subtitulo 3',
+            counterText: '3/4',
+            image: AssetImage("assets/onboarding1.png"),
+            backgroundColor: Colors.brown,
+            titleColor: Colors.white,
+            subtitleColor: Colors.amber,
+            background: 'assets/bubbles-lottie-animation.json')),
+    OnBoardingPageWidget(
+        model: OnBoardingModel(
+            title: 'Pagina 4',
+            subtitle: 'Subtitulo 4',
+            counterText: '4/4',
+            image: AssetImage("assets/onboarding1.png"),
+            backgroundColor: Colors.teal,
+            titleColor: Colors.white,
+            subtitleColor: Colors.amber,
+            background: 'assets/bubbles-lottie-animation.json'))
   ];
 
   @override

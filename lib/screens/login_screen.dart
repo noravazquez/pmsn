@@ -64,6 +64,15 @@ class _LoginScreenState extends State<LoginScreen> {
           });
         });
 
+    final btnTheme = InkWell(
+      onTap: () {},
+      child: const Icon(
+        Icons.settings,
+        color: Colors.blueGrey,
+        size: 40.0,
+      ),
+    );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -79,9 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  Positioned(
-                      top: 20,
-                      child: Lottie.asset('bubbles-lottie-animation.json')),
+                  Positioned(top: 50, left: 20, child: btnTheme),
                   Responsive(
                     mobile: MobileLoginScreen(
                         spaceHorizontal: spaceHorizontal,
