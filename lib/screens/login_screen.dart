@@ -79,7 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  Positioned(top: 20, child: Lottie.asset('a')),
+                  Positioned(
+                      top: 20,
+                      child: Lottie.asset('bubbles-lottie-animation.json')),
                   Responsive(
                     mobile: MobileLoginScreen(
                         spaceHorizontal: spaceHorizontal,

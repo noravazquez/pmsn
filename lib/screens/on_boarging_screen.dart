@@ -14,69 +14,93 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final controller = LiquidController();
-
   int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    final pages = [];
-
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            bottom: 60.0,
-            child: OutlinedButton(
-              onPressed: () {
-                int nextPage = controller.currentPage + 1;
-                controller.animateToPage(page: nextPage);
-              },
-              style: ElevatedButton.styleFrom(
-                  side: const BorderSide(color: Colors.black26),
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(20),
-                  onPrimary: Colors.white),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                    color: Color(0xff272727), shape: BoxShape.circle),
-                child: Icon(Icons.arrow_forward_ios),
-              ),
+      body: Stack(children: [
+        LiquidSwipe(
+            liquidController: controller,
+            onPageChangeCallback: OnPageChangedCallback,
+            enableSideReveal: true,
+            waveType: WaveType.circularReveal,
+            slideIconWidget: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
             ),
-          ),
-          Positioned(
-              top: 50,
-              right: 20,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login');
-                },
-                child: const Text(
-                  "Skip",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    decoration: TextDecoration.underline,
-                  ),
+            pages: [
+              Container(
+                color: Color.fromRGBO(11, 23, 7, 1),
+                child: Center(
+                  child: Text('Page 1'),
                 ),
-              )),
-          Positioned(
-            bottom: 10,
-            child: AnimatedSmoothIndicator(
-              count: 4,
-              activeIndex: controller.currentPage,
-              effect: const WormEffect(
-                  activeDotColor: Color(0xff272727), dotHeight: 5.0),
-            ),
-          )
-        ],
-      ),
+              ),
+              Container(
+                color: Color.fromRGBO(229, 235, 210, 1),
+                child: Center(
+                  child: Text('Page 2'),
+                ),
+              ),
+              Container(
+                color: Color.fromRGBO(27, 32, 49, 1),
+                child: Center(
+                  child: Text('Page 3'),
+                ),
+              ),
+              Container(
+                color: Color.fromRGBO(205, 209, 201, 1),
+                child: Center(
+                  child: Text('Page 4'),
+                ),
+              )
+            ]),
+        Positioned(
+            bottom: 0,
+            left: 16,
+            right: 32,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      int nextPage = controller.currentPage + 1;
+                      controller.animateToPage(page: nextPage);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        side: BorderSide(color: Colors.black26),
+                        shape: CircleBorder(),
+                        padding: EdgeInsets.all(20),
+                        onPrimary: Colors.white),
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                          color: Colors.black, shape: BoxShape.circle),
+                      child: Icon(Icons.arrow_forward_ios),
+                    )),
+                AnimatedSmoothIndicator(
+                  activeIndex: controller.currentPage,
+                  count: 4,
+                  effect: const WormEffect(
+                      spacing: 16,
+                      dotColor: Colors.white54,
+                      activeDotColor: Colors.white),
+                  onDotClicked: (index) {
+                    controller.animateToPage(page: index);
+                  },
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: Text('SKIP')),
+              ],
+            )),
+      ]),
     );
   }
 
-  void onPageChangedCallback(int activePageIndex) {
+  OnPageChangedCallback(int activePageIndex) {
     setState(() {
       currentPage = activePageIndex;
     });
