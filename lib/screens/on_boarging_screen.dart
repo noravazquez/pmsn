@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:lottie/lottie.dart';
-import 'package:primer_proyecto/models/model_on_boarding.dart';
 import 'package:primer_proyecto/widgets/on_boarding_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -16,6 +15,45 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final controller = LiquidController();
   int currentPage = 0;
 
+  final pages = [
+    CardData(
+        title: '',
+        subtitle: '',
+        counterText: '',
+        image: AssetImage(''),
+        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
+        titleColor: Color.fromRGBO(229, 235, 210, 1),
+        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
+        background: ''),
+    CardData(
+        title: '',
+        subtitle: '',
+        counterText: '',
+        image: AssetImage(''),
+        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
+        titleColor: Color.fromRGBO(229, 235, 210, 1),
+        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
+        background: ''),
+    CardData(
+        title: '',
+        subtitle: '',
+        counterText: '',
+        image: AssetImage(''),
+        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
+        titleColor: Color.fromRGBO(229, 235, 210, 1),
+        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
+        background: ''),
+    CardData(
+        title: '',
+        subtitle: '',
+        counterText: '',
+        image: AssetImage(''),
+        backgroundColor: Color.fromRGBO(229, 235, 210, 1),
+        titleColor: Color.fromRGBO(229, 235, 210, 1),
+        subtitleColor: Color.fromRGBO(229, 235, 210, 1),
+        background: '')
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,32 +67,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               Icons.arrow_back_ios,
               color: Colors.white,
             ),
-            pages: [
-              Container(
-                color: Color.fromRGBO(11, 23, 7, 1),
-                child: Center(
-                  child: Text('Page 1'),
-                ),
-              ),
-              Container(
-                color: Color.fromRGBO(229, 235, 210, 1),
-                child: Center(
-                  child: Text('Page 2'),
-                ),
-              ),
-              Container(
-                color: Color.fromRGBO(27, 32, 49, 1),
-                child: Center(
-                  child: Text('Page 3'),
-                ),
-              ),
-              Container(
-                color: Color.fromRGBO(205, 209, 201, 1),
-                child: Center(
-                  child: Text('Page 4'),
-                ),
-              )
-            ]),
+            pages: pages),
         Positioned(
             bottom: 0,
             left: 16,
