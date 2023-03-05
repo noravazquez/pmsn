@@ -27,37 +27,40 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             backgroundColor: Color.fromRGBO(11, 23, 7, 1),
             titleColor: Colors.white,
             subtitleColor: Colors.amber,
-            background: 'assets/animations/36584-fire-works.json')),
+            background: 'assets/animations/fireworks-explode.json')),
     OnBoardingPageWidget(
         model: OnBoardingModel(
-            title: 'Pagina 2',
-            subtitle: 'Subtitulo 2',
+            title: 'Oferta educativa',
+            subtitle:
+                'Ingeniería ambiental, ingeniería sistemas computacionales, ingeniería en electrónica, ingeniería química, ingeniería mecánica, ingeniería bioquímica, ingeniería industrial, ingeniería mecatrónica, licenciatura en administración, ingeniería en gestión empresarial',
             counterText: '2/4',
-            image: AssetImage("assets/onboarding1.png"),
-            backgroundColor: Colors.red,
+            image: AssetImage("assets/onboarding2.png"),
+            backgroundColor: Color.fromRGBO(229, 235, 210, 1),
             titleColor: Colors.white,
             subtitleColor: Colors.amber,
-            background: 'assets/bubbles-lottie-animation.json')),
+            background: 'assets/animations/sparkles-burst.json')),
     OnBoardingPageWidget(
         model: OnBoardingModel(
-            title: 'Pagina 3',
-            subtitle: 'Subtitulo 3',
+            title: 'Conoce nuestras instalaciones',
+            subtitle:
+                'Campus I: Antonio García Cubas, Pte #600 esq. Av. Tecnológico, Celaya, Gto. México. Campus II: Antonio García Cubas, Pte #1200 esq. Ignacio Borunda, Celaya, Gto. México',
             counterText: '3/4',
-            image: AssetImage("assets/onboarding1.png"),
-            backgroundColor: Colors.brown,
+            image: AssetImage("assets/onboarding3.png"),
+            backgroundColor: Color.fromRGBO(27, 32, 49, 1),
             titleColor: Colors.white,
             subtitleColor: Colors.amber,
-            background: 'assets/bubbles-lottie-animation.json')),
+            background: 'assets/animations/white-bubbles.json')),
     OnBoardingPageWidget(
         model: OnBoardingModel(
-            title: 'Pagina 4',
-            subtitle: 'Subtitulo 4',
+            title: 'Rumbo al 65 aniversario',
+            subtitle:
+                'Institución pública de educación, fundada en 1958, iniciando servicios desde secundaria técnica. Actualmente dedicada a la educación superior en niveles de licenciatura, maestría y doctorado.',
             counterText: '4/4',
-            image: AssetImage("assets/onboarding1.png"),
-            backgroundColor: Colors.teal,
+            image: AssetImage("assets/onboarding4.png"),
+            backgroundColor: Color.fromRGBO(205, 209, 201, 1),
             titleColor: Colors.white,
             subtitleColor: Colors.amber,
-            background: 'assets/bubbles-lottie-animation.json'))
+            background: 'assets/animations/fireworks.json'))
   ];
 
   @override
