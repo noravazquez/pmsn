@@ -19,14 +19,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final pages = [
     OnBoardingPageWidget(
         model: OnBoardingModel(
-            title: 'Pagina 1',
-            subtitle: 'Subtitulo 1',
+            title: 'TECNM en Celaya',
+            subtitle:
+                'Somos una Institución de Educación Superior, consolidada en la Región Laja-Bajío del Estado de Guanajuato, con oferta educativa a nivel profesional, maestrías y doctorados.',
             counterText: '1/4',
             image: AssetImage("assets/onboarding1.png"),
-            backgroundColor: Colors.black,
+            backgroundColor: Color.fromRGBO(11, 23, 7, 1),
             titleColor: Colors.white,
             subtitleColor: Colors.amber,
-            background: 'assets/bubbles-lottie-animation.json')),
+            background: 'assets/animations/36584-fire-works.json')),
     OnBoardingPageWidget(
         model: OnBoardingModel(
             title: 'Pagina 2',
