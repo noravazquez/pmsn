@@ -64,11 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             Navigator.pushNamed(context, '/register');
           },
-          child: const Text('Crear cuenta',
-              style: TextStyle(
-                  fontSize: 18,
-                  decoration: TextDecoration.underline,
-                  color: Colors.blueGrey))),
+          child: Text('Crear cuenta',
+              style: Theme.of(context).textTheme.bodyLarge)),
     );
 
     final txtAboutUs = Padding(
@@ -77,8 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             Navigator.pushNamed(context, '/onboarding');
           },
-          child: const Text('About Us',
-              style: TextStyle(fontSize: 17, color: Colors.blueGrey))),
+          child:
+              Text('About Us', style: Theme.of(context).textTheme.bodyLarge)),
     );
 
     final btnEmail = SocialLoginButton(
@@ -99,7 +96,6 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: const Icon(
         Icons.settings,
-        color: Colors.blueGrey,
         size: 40.0,
       ),
     );
@@ -171,11 +167,8 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "SELECCIONE UN TEMA",
-                  style: GoogleFonts.taviraj(
-                    color: Colors.blueGrey,
-                    fontSize: 20,
-                  ),
+                  "Seleccione un tema".toUpperCase(),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 RadioGroup<String>.builder(
                     groupValue: _selectColor,
@@ -193,7 +186,10 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           actions: [
             MaterialButton(
-              child: Text("Close"),
+              child: Text(
+                "Close",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },

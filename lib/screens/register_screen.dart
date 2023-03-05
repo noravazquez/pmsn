@@ -84,16 +84,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           onPressed: () {
             Navigator.pushNamed(context, '/login');
           },
-          child: const Text('Already have an account? Log in',
-              style: TextStyle(
-                  fontSize: 15,
-                  decoration: TextDecoration.underline,
-                  color: Colors.blueGrey))),
+          child: Text('Already have an account? Log in',
+              style: Theme.of(context).textTheme.bodyLarge)),
     );
     final btnRegister = SocialLoginButton(
         buttonType: SocialLoginButtonType.generalLogin,
         text: 'Sign up',
-        backgroundColor: Colors.blue,
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -109,7 +105,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       },
       child: Icon(
         Icons.add_a_photo,
-        color: Colors.grey,
         size: 30.0,
       ),
     );
@@ -196,9 +191,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     leading: const Icon(
                       Icons.camera,
-                      color: Colors.blueGrey,
                     ),
-                    title: Text('Camera'),
+                    title: Text(
+                      'Camera',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   ),
                   ListTile(
                     onTap: () {
@@ -206,9 +203,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     leading: const Icon(
                       Icons.image,
-                      color: Colors.blueGrey,
                     ),
-                    title: Text('Gallery'),
+                    title: Text('Gallery',
+                        style: Theme.of(context).textTheme.bodyLarge),
                   )
                 ],
               ),

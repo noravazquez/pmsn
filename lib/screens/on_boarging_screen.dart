@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:lottie/lottie.dart';
 import 'package:primer_proyecto/models/model_onboarding.dart';
+import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/widgets/on_boarding_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -67,6 +68,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             onPageChangeCallback: OnPageChangedCallback,
             enableSideReveal: true,
             waveType: WaveType.circularReveal,
+            positionSlideIcon: 0.8,
             slideIconWidget: const Icon(
               Icons.arrow_back_ios,
               color: Colors.white,
@@ -91,14 +93,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 child: Icon(Icons.arrow_forward_ios),
               )),
         ),
-        Positioned(
-            top: 50,
-            left: 20,
-            child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login');
-                },
-                child: Text('SKIP'))),
+        Responsive(
+            mobile: MobileScreenSkip(),
+            tablet: TabletDesktopScreenSkip(),
+            desktop: TabletDesktopScreenSkip()),
         Positioned(
           bottom: 10,
           child: AnimatedSmoothIndicator(
@@ -106,8 +104,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             count: 4,
             effect: const WormEffect(
                 spacing: 16,
-                dotColor: Colors.white54,
-                activeDotColor: Colors.white),
+                dotColor: Colors.black26,
+                activeDotColor: Colors.black45),
             onDotClicked: (index) {
               controller.animateToPage(page: index);
             },
@@ -121,5 +119,44 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     setState(() {
       currentPage = activePageIndex;
     });
+  }
+}
+
+class MobileScreenSkip extends StatelessWidget {
+  const MobileScreenSkip({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+        top: 50,
+        left: 20,
+        child: TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/login');
+            },
+            child: Text('SKIP', style: Theme.of(context).textTheme.bodyLarge)));
+  }
+}
+
+class TabletDesktopScreenSkip extends StatelessWidget {
+  const TabletDesktopScreenSkip({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+        top: 50,
+        right: 20,
+        child: TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/login');
+            },
+            child: Text(
+              'SKIP',
+              style: Theme.of(context).textTheme.bodyLarge,
+            )));
   }
 }
