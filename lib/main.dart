@@ -40,7 +40,7 @@ class PMSNApp extends StatelessWidget {
     return MaterialApp(
       theme: theme.getThemeData(),
       routes: getApplicationRoutes(),
-      home: LoginScreen(),
+      home: OnBoardingScreen(),
     );
   }
 }

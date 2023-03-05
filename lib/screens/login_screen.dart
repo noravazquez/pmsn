@@ -177,9 +177,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         _selectColor = val!;
                       });
                       onThemeChange(_selectColor, themeProvider);
-                      print(_selectColor);
                     },
                     items: _colors,
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
                     itemBuilder: (item) => RadioButtonBuilder(item)),
               ],
             ),
