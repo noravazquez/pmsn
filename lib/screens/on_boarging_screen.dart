@@ -62,7 +62,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: [
+      body: Stack(alignment: Alignment.center, children: [
         LiquidSwipe(
             liquidController: controller,
             onPageChangeCallback: OnPageChangedCallback,
@@ -74,46 +74,46 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             ),
             pages: pages),
         Positioned(
-            bottom: 0,
-            left: 16,
-            right: 32,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                OutlinedButton(
-                    onPressed: () {
-                      int nextPage = controller.currentPage + 1;
-                      controller.animateToPage(page: nextPage);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        side: BorderSide(color: Colors.black26),
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.all(20),
-                        onPrimary: Colors.white),
-                    child: Container(
-                      padding: EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                          color: Colors.black, shape: BoxShape.circle),
-                      child: Icon(Icons.arrow_forward_ios),
-                    )),
-                AnimatedSmoothIndicator(
-                  activeIndex: controller.currentPage,
-                  count: 4,
-                  effect: const WormEffect(
-                      spacing: 16,
-                      dotColor: Colors.white54,
-                      activeDotColor: Colors.white),
-                  onDotClicked: (index) {
-                    controller.animateToPage(page: index);
-                  },
-                ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/login');
-                    },
-                    child: Text('SKIP')),
-              ],
-            )),
+          bottom: 50.0,
+          child: OutlinedButton(
+              onPressed: () {
+                int nextPage = controller.currentPage + 1;
+                controller.animateToPage(page: nextPage);
+              },
+              style: ElevatedButton.styleFrom(
+                  side: BorderSide(color: Colors.black26),
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(15),
+                  onPrimary: Colors.white),
+              child: Container(
+                padding: EdgeInsets.all(15.0),
+                decoration:
+                    BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+                child: Icon(Icons.arrow_forward_ios),
+              )),
+        ),
+        Positioned(
+            top: 50,
+            left: 20,
+            child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/login');
+                },
+                child: Text('SKIP'))),
+        Positioned(
+          bottom: 10,
+          child: AnimatedSmoothIndicator(
+            activeIndex: controller.currentPage,
+            count: 4,
+            effect: const WormEffect(
+                spacing: 16,
+                dotColor: Colors.white54,
+                activeDotColor: Colors.white),
+            onDotClicked: (index) {
+              controller.animateToPage(page: index);
+            },
+          ),
+        )
       ]),
     );
   }
