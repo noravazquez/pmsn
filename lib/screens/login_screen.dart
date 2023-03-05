@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:primer_proyecto/provider/them_provider.dart';
@@ -110,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    opacity: 0.7,
+                    opacity: 0.5,
                     fit: BoxFit.cover,
                     image: AssetImage('assets/fondo.png'))),
             child: Padding(
@@ -169,7 +170,13 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("SELECCIONE UN TEMA"),
+                Text(
+                  "SELECCIONE UN TEMA",
+                  style: GoogleFonts.taviraj(
+                    color: Colors.blueGrey,
+                    fontSize: 20,
+                  ),
+                ),
                 RadioGroup<String>.builder(
                     groupValue: _selectColor,
                     onChanged: (val) {

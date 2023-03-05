@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/responsive.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -75,9 +76,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     height: 10,
   );
 
-  final btnGoogle = SocialLoginButton(
-      buttonType: SocialLoginButtonType.google, onPressed: () {});
-
   @override
   Widget build(BuildContext context) {
     final txtLogin = Padding(
@@ -118,6 +116,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final photo = AssetImage('assets/perfil_default.png');
 
+    final imgAvatar = CircleAvatar(
+      radius: 80.0,
+      backgroundImage: _imageFile == null
+          ? photo
+          : Image.file(File(_imageFile!.path.toString())).image,
+      backgroundColor: Colors.white10,
+    );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -125,9 +131,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Container(
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    opacity: 0.7,
+                    opacity: 0.5,
                     fit: BoxFit.cover,
-                    image: AssetImage('assets/fondo_pantalla.png'))),
+                    image: AssetImage('assets/fondo.png'))),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Stack(
@@ -135,36 +141,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   Form(
                       key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CircleAvatar(
-                            radius: 80.0,
-                            backgroundImage: _imageFile == null
-                                ? photo
-                                : Image.file(File(_imageFile!.path.toString()))
-                                    .image,
-                            backgroundColor: Colors.white10,
-                          ),
-                          btnPhoto,
-                          spaceHorizontal,
-                          txtFirstName,
-                          spaceHorizontal,
-                          txtLastName,
-                          spaceHorizontal,
-                          txtEmail,
-                          spaceHorizontal,
-                          txtPassword,
-                          spaceHorizontal,
-                          btnRegister,
-                          spaceHorizontal,
-                          Text('or'),
-                          spaceHorizontal,
-                          btnGoogle,
-                          spaceHorizontal,
-                          txtLogin
-                        ],
-                      )),
+                      child: Responsive(
+                          mobile: MobileScreen(
+                              imgAvatar: imgAvatar,
+                              btnPhoto: btnPhoto,
+                              spaceHorizontal: spaceHorizontal,
+                              txtFirstName: txtFirstName,
+                              txtLastName: txtLastName,
+                              txtEmail: txtEmail,
+                              txtPassword: txtPassword,
+                              btnRegister: btnRegister,
+                              txtLogin: txtLogin),
+                          tablet: TabletDesktopScreen(
+                              imgAvatar: imgAvatar,
+                              btnPhoto: btnPhoto,
+                              spaceHorizontal: spaceHorizontal,
+                              txtFirstName: txtFirstName,
+                              txtLastName: txtLastName,
+                              txtEmail: txtEmail,
+                              txtPassword: txtPassword,
+                              btnRegister: btnRegister,
+                              txtLogin: txtLogin),
+                          desktop: TabletDesktopScreen(
+                              imgAvatar: imgAvatar,
+                              btnPhoto: btnPhoto,
+                              spaceHorizontal: spaceHorizontal,
+                              txtFirstName: txtFirstName,
+                              txtLastName: txtLastName,
+                              txtEmail: txtEmail,
+                              txtPassword: txtPassword,
+                              btnRegister: btnRegister,
+                              txtLogin: txtLogin))),
                 ],
               ),
             ),
@@ -216,6 +223,124 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _imageFile = image;
     });
     Navigator.of(context).pop();
+  }
+}
+
+class MobileScreen extends StatelessWidget {
+  const MobileScreen({
+    super.key,
+    required this.imgAvatar,
+    required this.btnPhoto,
+    required this.spaceHorizontal,
+    required this.txtFirstName,
+    required this.txtLastName,
+    required this.txtEmail,
+    required this.txtPassword,
+    required this.btnRegister,
+    required this.txtLogin,
+  });
+
+  final CircleAvatar imgAvatar;
+  final InkWell btnPhoto;
+  final SizedBox spaceHorizontal;
+  final TextFormField txtFirstName;
+  final TextFormField txtLastName;
+  final TextFormField txtEmail;
+  final TextFormField txtPassword;
+  final SocialLoginButton btnRegister;
+  final Padding txtLogin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        imgAvatar,
+        btnPhoto,
+        spaceHorizontal,
+        txtFirstName,
+        spaceHorizontal,
+        txtLastName,
+        spaceHorizontal,
+        txtEmail,
+        spaceHorizontal,
+        txtPassword,
+        spaceHorizontal,
+        btnRegister,
+        spaceHorizontal,
+        txtLogin
+      ],
+    );
+  }
+}
+
+class TabletDesktopScreen extends StatelessWidget {
+  const TabletDesktopScreen({
+    super.key,
+    required this.imgAvatar,
+    required this.btnPhoto,
+    required this.spaceHorizontal,
+    required this.txtFirstName,
+    required this.txtLastName,
+    required this.txtEmail,
+    required this.txtPassword,
+    required this.btnRegister,
+    required this.txtLogin,
+  });
+
+  final CircleAvatar imgAvatar;
+  final InkWell btnPhoto;
+  final SizedBox spaceHorizontal;
+  final TextFormField txtFirstName;
+  final TextFormField txtLastName;
+  final TextFormField txtEmail;
+  final TextFormField txtPassword;
+  final SocialLoginButton btnRegister;
+  final Padding txtLogin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            imgAvatar,
+            spaceHorizontal,
+            btnPhoto,
+            spaceHorizontal,
+            txtLogin
+          ],
+        )),
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 450,
+              child: Column(
+                children: [
+                  txtFirstName,
+                  spaceHorizontal,
+                  txtLastName,
+                  spaceHorizontal,
+                  txtEmail,
+                  spaceHorizontal,
+                  txtPassword,
+                  spaceHorizontal,
+                  btnRegister
+                ],
+              ),
+            )
+          ],
+        ))
+      ],
+    );
   }
 }
 
