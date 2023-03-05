@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:primer_proyecto/models/model_onboarding.dart';
+import 'package:primer_proyecto/responsive.dart';
 
 class OnBoardingPageWidget extends StatelessWidget {
   const OnBoardingPageWidget({required this.model, super.key});
@@ -16,45 +17,133 @@ class OnBoardingPageWidget extends StatelessWidget {
           Container(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Positioned(top: 20, child: Lottie.asset(model.background)),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ImageOnBoarding(model: model),
-                        Column(
-                          children: [
-                            Text(
-                              model.title.toUpperCase(),
-                              style: TextStyle(
-                                  color: model.titleColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              model.subtitle,
-                              style: TextStyle(
-                                color: model.subtitleColor,
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                        Text(model.counterText)
-                      ],
-                    ),
-                  )
-                ],
-              ),
+              child: Responsive(
+                  mobile: MobileScreen(model: model),
+                  tablet: TabletDesktopScreen(model: model),
+                  desktop: TabletDesktopScreen(model: model)),
             ),
           )
         ],
       ),
+    );
+  }
+}
+
+class MobileScreen extends StatelessWidget {
+  const MobileScreen({
+    super.key,
+    required this.model,
+  });
+
+  final OnBoardingModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Positioned(top: 20, child: Lottie.asset(model.background)),
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ImageOnBoarding(model: model),
+              Column(
+                children: [
+                  Text(
+                    model.title.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: model.titleColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    model.subtitle,
+                    style: TextStyle(
+                      color: model.subtitleColor,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 130,
+                  )
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class TabletDesktopScreen extends StatelessWidget {
+  const TabletDesktopScreen({
+    super.key,
+    required this.model,
+  });
+
+  final OnBoardingModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+            child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Positioned(top: 20, child: Lottie.asset(model.background)),
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ImageOnBoarding(model: model),
+                ],
+              ),
+            )
+          ],
+        )),
+        Expanded(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Positioned(top: 20, child: Lottie.asset(model.background)),
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      model.title.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: model.titleColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      model.subtitle,
+                      style: TextStyle(
+                        color: model.subtitleColor,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -76,7 +165,6 @@ class ImageOnBoarding extends StatelessWidget {
             Expanded(child: Image(image: model.image)),
           ],
         ),
-        SizedBox(height: 10.0),
       ],
     );
   }

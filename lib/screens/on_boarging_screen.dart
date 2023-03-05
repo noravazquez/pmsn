@@ -22,45 +22,41 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             title: 'TECNM en Celaya',
             subtitle:
                 'Somos una Institución de Educación Superior, consolidada en la Región Laja-Bajío del Estado de Guanajuato, con oferta educativa a nivel profesional, maestrías y doctorados.',
-            counterText: '1/4',
             image: AssetImage("assets/onboarding1.png"),
             backgroundColor: Color.fromRGBO(11, 23, 7, 1),
-            titleColor: Colors.white,
-            subtitleColor: Colors.amber,
+            titleColor: Color.fromRGBO(229, 235, 210, 1),
+            subtitleColor: Color.fromRGBO(229, 235, 210, 1),
             background: 'assets/animations/fireworks-explode.json')),
     OnBoardingPageWidget(
         model: OnBoardingModel(
             title: 'Oferta educativa',
             subtitle:
                 'Ingeniería ambiental, ingeniería sistemas computacionales, ingeniería en electrónica, ingeniería química, ingeniería mecánica, ingeniería bioquímica, ingeniería industrial, ingeniería mecatrónica, licenciatura en administración, ingeniería en gestión empresarial',
-            counterText: '2/4',
             image: AssetImage("assets/onboarding2.png"),
             backgroundColor: Color.fromRGBO(229, 235, 210, 1),
-            titleColor: Colors.white,
-            subtitleColor: Colors.amber,
+            titleColor: Color.fromRGBO(27, 32, 49, 1),
+            subtitleColor: Color.fromRGBO(27, 32, 49, 1),
             background: 'assets/animations/sparkles-burst.json')),
     OnBoardingPageWidget(
         model: OnBoardingModel(
             title: 'Conoce nuestras instalaciones',
             subtitle:
                 'Campus I: Antonio García Cubas, Pte #600 esq. Av. Tecnológico, Celaya, Gto. México. Campus II: Antonio García Cubas, Pte #1200 esq. Ignacio Borunda, Celaya, Gto. México',
-            counterText: '3/4',
             image: AssetImage("assets/onboarding3.png"),
             backgroundColor: Color.fromRGBO(27, 32, 49, 1),
-            titleColor: Colors.white,
-            subtitleColor: Colors.amber,
+            titleColor: Color.fromRGBO(205, 209, 201, 1),
+            subtitleColor: Color.fromRGBO(205, 209, 201, 1),
             background: 'assets/animations/white-bubbles.json')),
     OnBoardingPageWidget(
         model: OnBoardingModel(
             title: 'Rumbo al 65 aniversario',
             subtitle:
                 'Institución pública de educación, fundada en 1958, iniciando servicios desde secundaria técnica. Actualmente dedicada a la educación superior en niveles de licenciatura, maestría y doctorado.',
-            counterText: '4/4',
             image: AssetImage("assets/onboarding4.png"),
             backgroundColor: Color.fromRGBO(205, 209, 201, 1),
-            titleColor: Colors.white,
-            subtitleColor: Colors.amber,
-            background: 'assets/animations/fireworks.json'))
+            titleColor: Color.fromRGBO(11, 23, 7, 1),
+            subtitleColor: Color.fromRGBO(11, 23, 7, 1),
+            background: 'assets/animations/confetti.json'))
   ];
 
   @override
@@ -87,10 +83,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               style: ElevatedButton.styleFrom(
                   side: BorderSide(color: Colors.black26),
                   shape: CircleBorder(),
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(10),
                   onPrimary: Colors.white),
               child: Container(
-                padding: EdgeInsets.all(15.0),
+                padding: EdgeInsets.all(10.0),
                 decoration:
                     BoxDecoration(color: Colors.black, shape: BoxShape.circle),
                 child: Icon(Icons.arrow_forward_ios),
