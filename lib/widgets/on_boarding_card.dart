@@ -68,7 +68,7 @@ class MobileScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: 130,
+                    height: 140,
                   )
                 ],
               ),
