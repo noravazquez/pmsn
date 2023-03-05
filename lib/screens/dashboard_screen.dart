@@ -12,12 +12,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  var isDarkModeEnabled = false;
-
   @override
   Widget build(BuildContext context) {
-    ThemeProvider theme = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Hola'),
@@ -39,16 +35,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               leading: Icon(Icons.settings),
               trailing: Icon(Icons.chevron_right),
             ),
-            DayNightSwitcher(
-              isDarkModeEnabled: isDarkModeEnabled,
-              onStateChanged: (isDarkModeEnabled) {
-                isDarkModeEnabled
-                    ? theme.setthemeData(StylesSettings.darkTheme(context))
-                    : theme.setthemeData(StylesSettings.lightTheme(context));
-                this.isDarkModeEnabled = isDarkModeEnabled;
-                setState(() {});
-              },
-            )
           ],
         ),
       ),

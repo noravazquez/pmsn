@@ -3,18 +3,28 @@ import 'package:primer_proyecto/provider/them_provider.dart';
 import 'package:primer_proyecto/routes.dart';
 import 'package:primer_proyecto/screens/login_screen.dart';
 import 'package:primer_proyecto/screens/on_boarging_screen.dart';
+import 'package:primer_proyecto/settings/styles_settings.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  final themeSelect = sharedPreferences.getInt('theme') ?? 0;
+  runApp(MyApp(themeSelect: themeSelect));
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({required this.themeSelect, super.key});
+
+  final int themeSelect;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider(context)),
+        ChangeNotifierProvider(
+            create: (_) => ThemeProvider(themeSelect, context)),
       ],
       child: PMSNApp(),
     );
@@ -28,9 +38,9 @@ class PMSNApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
     return MaterialApp(
-      theme: theme.getthemeData(),
+      theme: theme.getThemeData(),
       routes: getApplicationRoutes(),
-      home: OnBoardingScreen(),
+      home: LoginScreen(),
     );
   }
 }
