@@ -1,6 +1,7 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:primer_proyecto/provider/them_provider.dart';
+import 'package:primer_proyecto/screens/list_post.dart';
 import 'package:primer_proyecto/settings/styles_settings.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
+      body: ListPost(),
       drawer: Drawer(
         child: ListView(
           children: [
