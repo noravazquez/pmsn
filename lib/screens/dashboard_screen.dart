@@ -23,6 +23,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       body: ListPost(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: const Text('Add post'),
+        icon: const Icon(Icons.add_comment),
+      ),
       drawer: Drawer(
         child: ListView(
           children: [

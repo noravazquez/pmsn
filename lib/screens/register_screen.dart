@@ -318,8 +318,8 @@ class TabletDesktopScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 450,
+            Padding(
+              padding: const EdgeInsets.all(50),
               child: Column(
                 children: [
                   txtFirstName,
@@ -333,7 +333,7 @@ class TabletDesktopScreen extends StatelessWidget {
                   btnRegister
                 ],
               ),
-            )
+            ),
           ],
         ))
       ],

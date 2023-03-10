@@ -67,8 +67,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             liquidController: controller,
             onPageChangeCallback: OnPageChangedCallback,
             enableSideReveal: true,
-            waveType: WaveType.circularReveal,
-            positionSlideIcon: 0.8,
             slideIconWidget: const Icon(
               Icons.arrow_back_ios,
               color: Colors.white,
