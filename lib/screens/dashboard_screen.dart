@@ -24,7 +24,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: ListPost(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/add').then((value) {
+            setState(() {});
+          });
+        },
         label: const Text('Add post'),
         icon: const Icon(Icons.add_comment),
       ),

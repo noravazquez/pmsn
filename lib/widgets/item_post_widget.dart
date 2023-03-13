@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/database/database_helper.dart';
 import 'package:primer_proyecto/models/post_model.dart';
 
 class ItemPostWidget extends StatelessWidget {
   ItemPostWidget({super.key, this.objPostModel});
 
   PostModel? objPostModel;
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,7 @@ class ItemPostWidget extends StatelessWidget {
     final iconRate = Icon(Icons.rate_review);
 
     return Container(
+      margin: const EdgeInsets.all(10),
       height: 250,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -38,7 +42,36 @@ class ItemPostWidget extends StatelessWidget {
           Row(
             children: [imgPost, txtDesc],
           ),
-          iconRate
+          Row(
+            children: [
+              iconRate,
+              Expanded(child: Container()), //espacio vacio que se adapta
+              IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Text('Confirmar borrado'),
+                              content: Text('Deseas borrar el post?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      databaseHelper.DELETE(
+                                          'tblPost', objPostModel!.idPost!);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Ok')),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text('No'),
+                                )
+                              ],
+                            ));
+                  },
+                  icon: Icon(Icons.delete))
+            ],
+          )
         ],
       ),
     );

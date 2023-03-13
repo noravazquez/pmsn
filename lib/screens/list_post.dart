@@ -21,8 +21,7 @@ class _ListPostState extends State<ListPost> {
 
   @override
   Widget build(BuildContext context) {
-    return ItemPostWidget();
-    /*FutureBuilder(
+    return FutureBuilder(
       future: databaseHelper!.GETALLPOST(),
       builder: (context, AsyncSnapshot<List<PostModel>> snapshot) {
         if (snapshot.hasData) {
@@ -43,6 +42,6 @@ class _ListPostState extends State<ListPost> {
           );
         }
       },
-    );*/
+    );
   }
 }
