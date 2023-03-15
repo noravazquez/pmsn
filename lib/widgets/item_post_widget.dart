@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:primer_proyecto/database/database_helper.dart';
 import 'package:primer_proyecto/models/post_model.dart';
+import 'package:primer_proyecto/provider/flags_provider.dart';
+import 'package:provider/provider.dart';
 
 class ItemPostWidget extends StatelessWidget {
   ItemPostWidget({super.key, this.objPostModel});
@@ -27,6 +29,8 @@ class ItemPostWidget extends StatelessWidget {
     final txtDesc = Text("Aqui va el contenido del post");
 
     final iconRate = Icon(Icons.rate_review);
+
+    FlagsProvider flag = Provider.of<FlagsProvider>(context);
 
     return Container(
       margin: const EdgeInsets.all(10),
@@ -57,8 +61,11 @@ class ItemPostWidget extends StatelessWidget {
                               actions: [
                                 TextButton(
                                     onPressed: () {
-                                      databaseHelper.DELETE(
-                                          'tblPost', objPostModel!.idPost!);
+                                      databaseHelper
+                                          .DELETE(
+                                              'tblPost', objPostModel!.idPost!)
+                                          .then((value) =>
+                                              flag.setflagListPost());
                                       Navigator.pop(context);
                                     },
                                     child: Text('Ok')),

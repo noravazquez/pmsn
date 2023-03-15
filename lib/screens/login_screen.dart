@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Responsive(
                   mobile: MobileScreen(
                       btnTheme: btnTheme,
-                      //txtAboutUs: txtAboutUs,
+                      txtAboutUs: txtAboutUs,
                       spaceHorizontal: spaceHorizontal,
                       txtEmail: txtEmail,
                       txtPassword: txtPassword,
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       txtRegister: txtRegister),
                   tablet: TabletDesktopScreen(
                       btnTheme: btnTheme,
-                      //txtAboutUs: txtAboutUs,
+                      txtAboutUs: txtAboutUs,
                       spaceHorizontal: spaceHorizontal,
                       txtEmail: txtEmail,
                       txtPassword: txtPassword,
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       txtRegister: txtRegister),
                   desktop: TabletDesktopScreen(
                       btnTheme: btnTheme,
-                      //txtAboutUs: txtAboutUs,
+                      txtAboutUs: txtAboutUs,
                       spaceHorizontal: spaceHorizontal,
                       txtEmail: txtEmail,
                       txtPassword: txtPassword,
@@ -160,16 +160,16 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (_) => StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
         return AlertDialog(
+          title: Text(
+            "Seleccione un tema",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
           content: Container(
             height: 200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "Seleccione un tema".toUpperCase(),
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
                 RadioGroup<String>.builder(
                     groupValue: _selectColor,
                     onChanged: (val) {
@@ -205,7 +205,7 @@ class MobileScreen extends StatelessWidget {
   const MobileScreen({
     super.key,
     required this.btnTheme,
-    //required this.txtAboutUs,
+    required this.txtAboutUs,
     required this.spaceHorizontal,
     required this.txtEmail,
     required this.txtPassword,
@@ -217,7 +217,7 @@ class MobileScreen extends StatelessWidget {
   });
 
   final InkWell btnTheme;
-  //final Padding txtAboutUs;
+  final Padding txtAboutUs;
   final SizedBox spaceHorizontal;
   final TextFormField txtEmail;
   final TextFormField txtPassword;
@@ -233,7 +233,7 @@ class MobileScreen extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: [
         Positioned(top: 50, left: 20, child: btnTheme),
-        //Positioned(top: 30, right: 20, child: txtAboutUs),
+        Positioned(top: 30, right: 20, child: txtAboutUs),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -262,7 +262,7 @@ class TabletDesktopScreen extends StatelessWidget {
   const TabletDesktopScreen({
     super.key,
     required this.btnTheme,
-    //required this.txtAboutUs,
+    required this.txtAboutUs,
     required this.spaceHorizontal,
     required this.txtEmail,
     required this.txtPassword,
@@ -274,7 +274,7 @@ class TabletDesktopScreen extends StatelessWidget {
   });
 
   final InkWell btnTheme;
-  //final Padding txtAboutUs;
+  final Padding txtAboutUs;
   final SizedBox spaceHorizontal;
   final TextFormField txtEmail;
   final TextFormField txtPassword;
@@ -290,7 +290,7 @@ class TabletDesktopScreen extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: [
         Positioned(top: 50, left: 15, child: btnTheme),
-        //Positioned(bottom: 30, left: 15, child: txtAboutUs),
+        Positioned(bottom: 30, left: 15, child: txtAboutUs),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,

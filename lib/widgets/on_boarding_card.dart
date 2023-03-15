@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:liquid_swipe/PageHelpers/LiquidController.dart';
 import 'package:lottie/lottie.dart';
 import 'package:primer_proyecto/models/model_onboarding.dart';
 import 'package:primer_proyecto/responsive.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingPageWidget extends StatelessWidget {
-  const OnBoardingPageWidget({required this.model, super.key});
+  OnBoardingPageWidget({required this.model, super.key});
 
   final OnBoardingModel model;
 
@@ -30,7 +32,7 @@ class OnBoardingPageWidget extends StatelessWidget {
 }
 
 class MobileScreen extends StatelessWidget {
-  const MobileScreen({
+  MobileScreen({
     super.key,
     required this.model,
   });
@@ -74,7 +76,7 @@ class MobileScreen extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

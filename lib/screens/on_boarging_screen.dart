@@ -62,60 +62,64 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(alignment: Alignment.center, children: [
+        body: Stack(
+      children: [
         LiquidSwipe(
-            liquidController: controller,
-            onPageChangeCallback: OnPageChangedCallback,
-            enableSideReveal: true,
-            slideIconWidget: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-            pages: pages),
-        Positioned(
-          bottom: 50.0,
-          child: OutlinedButton(
-              onPressed: () {
-                int nextPage = controller.currentPage + 1;
-                controller.animateToPage(page: nextPage);
-              },
-              style: ElevatedButton.styleFrom(
-                  side: BorderSide(color: Colors.black26),
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(15),
-                  onPrimary: Colors.white),
-              child: Container(
-                padding: EdgeInsets.all(15.0),
-                decoration:
-                    BoxDecoration(color: Colors.black, shape: BoxShape.circle),
-                child: Icon(Icons.arrow_forward_ios),
-              )),
+          pages: pages,
+          onPageChangeCallback: OnPageChange,
+          liquidController: controller,
+          enableSideReveal: true,
+          slideIconWidget: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
         ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 16),
+            child: AnimatedSmoothIndicator(
+              activeIndex: currentPage,
+              count: pages.length,
+              effect: ExpandingDotsEffect(
+                dotHeight: 12,
+                dotWidth: 12,
+                dotColor: Colors.black26,
+                activeDotColor: Colors.black45,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+            left: MediaQuery.of(context).size.width / 2 - 40,
+            bottom: 50.0,
+            child: OutlinedButton(
+                onPressed: () {
+                  int nextPage = controller.currentPage + 1;
+                  controller.animateToPage(page: nextPage);
+                },
+                style: ElevatedButton.styleFrom(
+                    side: BorderSide(color: Colors.black26),
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(15),
+                    onPrimary: Colors.white),
+                child: Container(
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                      color: Colors.black, shape: BoxShape.circle),
+                  child: Icon(Icons.arrow_forward_ios),
+                ))),
         Responsive(
             mobile: MobileScreenSkip(),
             tablet: TabletDesktopScreenSkip(),
-            desktop: TabletDesktopScreenSkip()),
-        Positioned(
-          bottom: 10,
-          child: AnimatedSmoothIndicator(
-            activeIndex: controller.currentPage,
-            count: 4,
-            effect: const WormEffect(
-                spacing: 16,
-                dotColor: Colors.black26,
-                activeDotColor: Colors.black45),
-            onDotClicked: (index) {
-              controller.animateToPage(page: index);
-            },
-          ),
-        )
-      ]),
-    );
+            desktop: TabletDesktopScreenSkip())
+      ],
+    ));
   }
 
-  OnPageChangedCallback(int activePageIndex) {
+  void OnPageChange(int page) {
     setState(() {
-      currentPage = activePageIndex;
+      currentPage = page;
     });
   }
 }
