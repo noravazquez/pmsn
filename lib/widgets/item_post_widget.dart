@@ -26,7 +26,7 @@ class ItemPostWidget extends StatelessWidget {
       height: 100,
     );
 
-    final txtDesc = Text("Aqui va el contenido del post");
+    final txtDesc = Text(objPostModel!.dscPost!);
 
     final iconRate = Icon(Icons.rate_review);
 
@@ -50,14 +50,25 @@ class ItemPostWidget extends StatelessWidget {
             children: [
               iconRate,
               Expanded(child: Container()), //espacio vacio que se adapta
-              IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/add',
+                        arguments: objPostModel);
+                  },
+                  icon: Icon(Icons.edit)),
               IconButton(
                   onPressed: () {
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                              title: Text('Confirmar borrado'),
-                              content: Text('Deseas borrar el post?'),
+                              title: Text(
+                                'Confirmar borrado',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              content: Text(
+                                'Deseas borrar el post?',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
                               actions: [
                                 TextButton(
                                     onPressed: () {

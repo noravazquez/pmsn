@@ -22,7 +22,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
-      body: ListPost(),
+      body: Stack(
+        children: [
+          ListPost(),
+          Positioned(
+              left: 20.0,
+              bottom: 20.0,
+              child: ElevatedButton(
+                child: Text(
+                  'Mis eventos',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/events');
+                },
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(130, 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20))),
+              ))
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, '/add').then((value) {
