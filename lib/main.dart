@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:primer_proyecto/provider/flags_provider.dart';
 import 'package:primer_proyecto/provider/them_provider.dart';
 import 'package:primer_proyecto/routes.dart';
+import 'package:primer_proyecto/screens/events_screen.dart';
 import 'package:primer_proyecto/screens/login_screen.dart';
 import 'package:primer_proyecto/screens/on_boarging_screen.dart';
 import 'package:primer_proyecto/settings/styles_settings.dart';

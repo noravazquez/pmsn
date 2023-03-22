@@ -13,6 +13,6 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     '/login': (BuildContext context) => LoginScreen(),
     '/onboarding': (BuildContext context) => OnBoardingScreen(),
     '/add': (BuildContext context) => AddPostScreen(),
-    '/events': (BuildContext context) => EventsScreen(),
+    '/events': (BuildContext context) => Eventos(),
   };
 }

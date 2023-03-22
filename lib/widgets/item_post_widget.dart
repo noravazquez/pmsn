@@ -73,8 +73,8 @@ class ItemPostWidget extends StatelessWidget {
                                 TextButton(
                                     onPressed: () {
                                       databaseHelper
-                                          .DELETE(
-                                              'tblPost', objPostModel!.idPost!)
+                                          .DELETE('tblPost',
+                                              objPostModel!.idPost!, 'idPost')
                                           .then((value) =>
                                               flag.setflagListPost());
                                       Navigator.pop(context);

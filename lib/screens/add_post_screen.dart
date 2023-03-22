@@ -65,11 +65,16 @@ class AddPostScreen extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       });
                     } else {
-                      databaseHelper.UPDATE('tblPost', {
-                        'idPost': objPostModel!.idPost,
-                        'dscPost': txtContPost.text,
-                        'datePost': DateTime.now().toString()
-                      }).then((value) {
+                      databaseHelper
+                          .UPDATE(
+                              'tblPost',
+                              {
+                                'idPost': objPostModel!.idPost,
+                                'dscPost': txtContPost.text,
+                                'datePost': DateTime.now().toString()
+                              },
+                              'idPost')
+                          .then((value) {
                         var msg = value > 0
                             ? 'Registro actualizado'
                             : 'Ocurrio un error';
