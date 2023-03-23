@@ -56,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-                currentAccountPicture: CircleAvatar(
+                currentAccountPicture: const CircleAvatar(
                   backgroundImage: NetworkImage(
                       'https://static.vecteezy.com/system/resources/previews/004/749/962/non_2x/lynx-head-mascot-sport-logo-vector.jpg'),
                 ),
@@ -74,9 +74,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               subtitle: Text('Descripcion de la practica',
                   style: Theme.of(context).textTheme.bodyLarge),
-              leading: Icon(Icons.settings),
-              trailing: Icon(Icons.chevron_right),
+              leading: const Icon(Icons.settings),
+              trailing: const Icon(Icons.chevron_right),
             ),
+            ListTile(
+              onTap: () => Navigator.pushNamed(context, '/popular'),
+              title: Text(
+                'API videos',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              leading: const Icon(Icons.movie),
+              trailing: const Icon(Icons.chevron_right),
+            )
           ],
         ),
       ),

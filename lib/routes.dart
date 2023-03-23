@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:primer_proyecto/screens/add_post_screen.dart';
 import 'package:primer_proyecto/screens/dashboard_screen.dart';
 import 'package:primer_proyecto/screens/events_screen.dart';
+import 'package:primer_proyecto/screens/list_popular_videos.dart';
 import 'package:primer_proyecto/screens/login_screen.dart';
 import 'package:primer_proyecto/screens/on_boarging_screen.dart';
 import 'package:primer_proyecto/screens/register_screen.dart';
@@ -14,5 +15,6 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     '/onboarding': (BuildContext context) => OnBoardingScreen(),
     '/add': (BuildContext context) => AddPostScreen(),
     '/events': (BuildContext context) => Eventos(),
+    '/popular': (BuildContext context) => ListPopularVideo(),
   };
 }
