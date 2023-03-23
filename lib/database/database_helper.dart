@@ -1,16 +1,16 @@
 import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'package:primer_proyecto/models/event_model.dart';
 import 'package:primer_proyecto/models/post_model.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   static final nameDB = 'SOCIALDB';
-  static final versionDB = 4;
+  static final versionDB = 7;
 
   static Database? _database;
+
   Future<Database> get database async {
     if (_database != null) return _database!;
     return _database = await _initDatabase();
@@ -27,29 +27,48 @@ class DatabaseHelper {
   }
 
   _createTables(Database db, int version) async {
-    String query =
-        "CREATE TABLE tblPost(idPost INTEGER PRIMARY KEY, dscPost VARCHAR(200), datePost DATE)";
-    db.execute(query);
-    query =
-        "CREATE TABLE tblEvents(idEvent INTEGER PRIMARY KEY, dscEvent VARCHAR(200), dateEvent DATE, complete BOOLEAN)";
-    db.execute(query);
+    String query = '''
+      CREATE TABLE tblPost (
+        idPost INTEGER PRIMARY KEY,
+        dscPost VARCHAR(200),
+        datePost DATE
+      );''';
+    await db.execute(query);
+    String query2 = '''
+      CREATE TABLE tblEvento (
+        idEvento INTEGER PRIMARY KEY,
+        descEvento VARCHAR(200),
+        fechaEvento DATE,
+        completado INTEGER
+      );
+    ''';
+    await db.execute(query2);
   }
 
   Future<int> INSERT(String tblName, Map<String, dynamic> data) async {
     var conexion = await database;
-    return conexion.insert(tblName, data);
+    print(data);
+    return await conexion.insert(tblName, data);
   }
 
   Future<int> UPDATE(
-      String tblName, Map<String, dynamic> data, String idColumn) async {
+      String tblName, Map<String, dynamic> data, String idColumnName) async {
     var conexion = await database;
-    return conexion.update(tblName, data,
-        where: '$idColumn=?', whereArgs: [data[idColumn]]);
+    return await conexion.update(
+      tblName,
+      data,
+      where: '$idColumnName = ?',
+      whereArgs: [data[idColumnName]],
+    );
   }
 
-  Future<int> DELETE(String tblName, int id, String idColumn) async {
+  Future<int> DELETE(String tblName, int id, String idColumnName) async {
     var conexion = await database;
-    return conexion.delete(tblName, where: '$idColumn=?', whereArgs: [id]);
+    return await conexion.delete(
+      tblName,
+      where: '$idColumnName = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<List<PostModel>> GETALLPOST() async {
@@ -58,9 +77,20 @@ class DatabaseHelper {
     return result.map((post) => PostModel.fromMap(post)).toList();
   }
 
-  Future<List<EventModel>> GETALLEVENTS() async {
+  Future<List<EventModel>> getAllEventos() async {
     var conexion = await database;
-    var result = await conexion.query('tblEvents');
-    return result.map((event) => EventModel.fromMap(event)).toList();
+    var result = await conexion.query('tblEvento');
+    return result.map((evento) => EventModel.fromMap(evento)).toList();
+  }
+
+  Future<List<EventModel>> getEventsForDay(String fecha) async {
+    var conexion = await database;
+    var query = "SELECT * FROM tblEvento where fechaEvento=?";
+    var result = await conexion.rawQuery(query, [fecha]);
+    List<EventModel> eventos = [];
+    if (result != null && result.isNotEmpty) {
+      eventos = result.map((evento) => EventModel.fromMap(evento)).toList();
+    }
+    return eventos;
   }
 }

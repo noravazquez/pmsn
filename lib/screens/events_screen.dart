@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/database/database_helper.dart';
+import 'package:primer_proyecto/models/event_model.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
 
 class Eventos extends StatefulWidget {
   @override
@@ -10,232 +13,103 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
   CalendarView _calendarView = CalendarView.month;
   Key _calendarKey = UniqueKey();
 
+  DatabaseHelper? databaseHelper;
+
+  List<EventModel> _eventModel = [];
+
+  DateTime? _seletedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    databaseHelper = DatabaseHelper();
+    _recuperarEventos();
+  }
+
+  void _recuperarEventos() async {
+    List<EventModel> eventModel = await databaseHelper!.getAllEventos();
+    setState(() {
+      _eventModel = eventModel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Syncfusion Calendar'),
+        title: Text(
+          'Mis eventos',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
         actions: [
-          PopupMenuButton<CalendarView>(
-            onSelected: (view) {
+          ToggleButtons(
+            children: [
+              Icon(Icons.calendar_month),
+              Icon(Icons.list),
+            ],
+            isSelected: [
+              _calendarView == CalendarView.month,
+              _calendarView == CalendarView.schedule,
+            ],
+            onPressed: (index) {
               setState(() {
-                _calendarView = view;
-                _calendarKey =
-                    UniqueKey(); // Cambia la clave para reconstruir el calendario
+                if (index == 0) {
+                  _calendarView = CalendarView.month;
+                  _calendarKey = UniqueKey();
+                } else if (index == 1) {
+                  _calendarView = CalendarView.schedule;
+                  _calendarKey = UniqueKey();
+                }
               });
             },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem(
-                value: CalendarView.month,
-                child: Text(
-                  'Month',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-              PopupMenuItem(
-                value: CalendarView.schedule,
-                child: Text(
-                  'Schedule',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-            ],
-            icon: _calendarView == CalendarView.month
-                ? Icon(Icons.list)
-                : Icon(Icons.calendar_month),
           ),
         ],
       ),
       body: SfCalendar(
-        key: _calendarKey, // Agrega la clave a la instancia de SfCalendar
+        key: _calendarKey,
         view: _calendarView,
-        dataSource: getCalendarDataSource(),
-        // Resto de las propiedades de la vista del calendario
+        dataSource: _DataSource(_eventModel),
+        onTap: (calendarTapDetails) {
+          if (calendarTapDetails.targetElement ==
+              CalendarElement.calendarCell) {
+            setState(() {
+              _seletedDate = calendarTapDetails.date;
+            });
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Agregar evento',
+                    style: Theme.of(context).textTheme.bodyLarge),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [],
+                ),
+              );
+            },
+          );
+        },
+        label: const Text('Add event'),
+        icon: const Icon(Icons.add),
       ),
     );
-  }
-
-  _DataSource getCalendarDataSource() {
-    final List<Appointment> appointments = <Appointment>[];
-    appointments.add(Appointment(
-      startTime: DateTime.now(),
-      endTime: DateTime.now().add(const Duration(hours: 1)),
-      subject: 'Meeting',
-      color: Colors.pink,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 4)),
-      endTime: DateTime.now().add(const Duration(hours: 5)),
-      subject: 'Release Meeting',
-      color: Colors.lightBlueAccent,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 6)),
-      endTime: DateTime.now().add(const Duration(hours: 7)),
-      subject: 'Performance check',
-      color: Colors.amber,
-    ));
-
-    return _DataSource(appointments);
   }
 }
 
 class _DataSource extends CalendarDataSource {
-  _DataSource(this.source);
-
-  List<Appointment> source;
-
-  @override
-  List<dynamic> get appointments => source;
-}
-/*import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-
-class Eventos extends StatefulWidget {
-  @override
-  _EventosState createState() => _EventosState();
-}
-
-class _EventosState extends State<Eventos> {
-  CalendarView _calendarView = CalendarView.month;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Event Screen'),
-      ),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _calendarView == CalendarView.month
-                  ? TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _calendarView = CalendarView.schedule;
-                        });
-                      },
-                      child: Text('Schedule'),
-                    )
-                  : TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _calendarView = CalendarView.month;
-                        });
-                      },
-                      child: Text('Month'),
-                    ),
-            ],
-          ),
-          Expanded(
-            child: SfCalendar(
-              view: _calendarView,
-              dataSource: getCalendarDataSource(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _DataSource getCalendarDataSource() {
-    final List<Appointment> appointments = <Appointment>[];
-    appointments.add(Appointment(
-      startTime: DateTime.now(),
-      endTime: DateTime.now().add(const Duration(hours: 1)),
-      subject: 'Meeting',
-      color: Colors.pink,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 4)),
-      endTime: DateTime.now().add(const Duration(hours: 5)),
-      subject: 'Release Meeting',
-      color: Colors.lightBlueAccent,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 6)),
-      endTime: DateTime.now().add(const Duration(hours: 7)),
-      subject: 'Performance check',
-      color: Colors.amber,
-    ));
-
-    return _DataSource(appointments);
+  _DataSource(List<EventModel> eventModel) {
+    appointments = eventModel.map((event) {
+      return Appointment(
+          startTime: event.fechaEvento!,
+          endTime: event.fechaEvento!.add(Duration(hours: 1)),
+          subject: event.descEvento!,
+          isAllDay: false,
+          color: event.completado! == 1 ? Colors.grey : Colors.blue);
+    }).toList();
   }
 }
-
-class _DataSource extends CalendarDataSource {
-  _DataSource(this.source);
-
-  List<Appointment> source;
-
-  @override
-  List<dynamic> get appointments => source;
-}*/
-/*import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-
-class Eventos extends StatefulWidget {
-  @override
-  _EventosState createState() => _EventosState();
-}
-
-class _EventosState extends State<Eventos> {
-  final CalendarController _calendarController = CalendarController();
-  CalendarView _currentView = CalendarView.month;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Eventos'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SfCalendar(
-              view: _currentView,
-              allowedViews: [CalendarView.month, CalendarView.schedule],
-              dataSource: getCalendarDataSource(),
-              controller: _calendarController,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _DataSource getCalendarDataSource() {
-    final List<Appointment> appointments = <Appointment>[];
-    appointments.add(Appointment(
-      startTime: DateTime.now(),
-      endTime: DateTime.now().add(const Duration(hours: 1)),
-      subject: 'Meeting',
-      color: Colors.pink,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 4)),
-      endTime: DateTime.now().add(const Duration(hours: 5)),
-      subject: 'Release Meeting',
-      color: Colors.lightBlueAccent,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 6)),
-      endTime: DateTime.now().add(const Duration(hours: 7)),
-      subject: 'Performance check',
-      color: Colors.amber,
-    ));
-
-    return _DataSource(appointments);
-  }
-}
-
-class _DataSource extends CalendarDataSource {
-  _DataSource(this.source);
-
-  List<Appointment> source;
-
-  @override
-  List<dynamic> get appointments => source;
-}*/
