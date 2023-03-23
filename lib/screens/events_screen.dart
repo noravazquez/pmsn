@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:primer_proyecto/database/database_helper.dart';
 import 'package:primer_proyecto/models/event_model.dart';
+import 'package:primer_proyecto/provider/flags_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -19,6 +21,8 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
 
   DateTime? _seletedDate;
 
+  TextEditingController _controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +38,14 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    FlagsProvider flag = Provider.of<FlagsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -88,7 +99,58 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
                     style: Theme.of(context).textTheme.bodyLarge),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [],
+                  children: [
+                    Text(
+                      'Fecha para el evento: ${DateFormat('dd/MM/yyyy').format(_seletedDate!)}',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    TextFormField(
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      decoration:
+                          InputDecoration(labelText: 'Descripcion del evento'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ingrese la descripcion del evento';
+                        }
+                        return null;
+                      },
+                      controller: _controller,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () async {
+                              if (_controller.text.isNotEmpty) {
+                                final event = EventModel(
+                                    descEvento: _controller.text,
+                                    fechaEvento:
+                                        _seletedDate!.toIso8601String(),
+                                    completado: 0);
+                                await databaseHelper!
+                                    .INSERT('tblEvento', event.toMap());
+                                _controller.clear();
+                                Navigator.pop(context);
+                                _recuperarEventos();
+                                setState(() {});
+                                flag.setflagListPost();
+                              }
+                            },
+                            child: Text(
+                              'Agregar',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            )),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Cancelar',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ))
+                      ],
+                    ),
+                  ],
                 ),
               );
             },
@@ -104,9 +166,10 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
 class _DataSource extends CalendarDataSource {
   _DataSource(List<EventModel> eventModel) {
     appointments = eventModel.map((event) {
+      DateTime dateTime = DateTime.parse(event.fechaEvento!);
       return Appointment(
-          startTime: event.fechaEvento!,
-          endTime: event.fechaEvento!.add(Duration(hours: 1)),
+          startTime: dateTime,
+          endTime: dateTime.add(Duration(hours: 1)),
           subject: event.descEvento!,
           isAllDay: false,
           color: event.completado! == 1 ? Colors.grey : Colors.blue);

@@ -1,7 +1,7 @@
 class EventModel {
   int? idEvento;
   String? descEvento;
-  DateTime? fechaEvento;
+  String? fechaEvento;
   int? completado;
 
   EventModel(
@@ -11,7 +11,7 @@ class EventModel {
     return EventModel(
       idEvento: map['idEvento'],
       descEvento: map['descEvento'],
-      fechaEvento: DateTime.parse(map['fechaEvento']),
+      fechaEvento: map['fechaEvento'],
       completado: map['completado'] == 1 ? 1 : 0,
     );
   }
