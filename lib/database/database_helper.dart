@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   static final nameDB = 'SOCIALDB';
-  static final versionDB = 7;
+  static final versionDB = 9;
 
   static Database? _database;
 
@@ -39,7 +39,7 @@ class DatabaseHelper {
         idEvento INTEGER PRIMARY KEY,
         descEvento VARCHAR(200),
         fechaEvento DATE,
-        completado INTEGER
+        completado BOOLEAN
       );
     ''';
     await db.execute(query2);
@@ -83,10 +83,10 @@ class DatabaseHelper {
     return result.map((evento) => EventModel.fromMap(evento)).toList();
   }
 
-  Future<List<EventModel>> getEventsForDay(String fecha) async {
+  Future<List<EventModel>> getEvent(int id) async {
     var conexion = await database;
-    var query = "SELECT * FROM tblEvento where fechaEvento=?";
-    var result = await conexion.rawQuery(query, [fecha]);
+    var query = "Select * from tblEvento where idEvento =?";
+    var result = await conexion.rawQuery(query, [id]);
     List<EventModel> eventos = [];
     if (result != null && result.isNotEmpty) {
       eventos = result.map((evento) => EventModel.fromMap(evento)).toList();

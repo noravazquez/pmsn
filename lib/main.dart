@@ -8,9 +8,11 @@ import 'package:primer_proyecto/screens/on_boarging_screen.dart';
 import 'package:primer_proyecto/settings/styles_settings.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final themeSelect = sharedPreferences.getInt('theme') ?? 0;
   runApp(MyApp(themeSelect: themeSelect));

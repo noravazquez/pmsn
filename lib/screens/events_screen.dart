@@ -19,15 +19,18 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
 
   List<EventModel> _eventModel = [];
 
-  DateTime? _seletedDate;
+  DateTime? _selectedDate;
 
   TextEditingController _controller = TextEditingController();
+
+  int? _selectedEventId;
 
   @override
   void initState() {
     super.initState();
     databaseHelper = DatabaseHelper();
     _recuperarEventos();
+    _selectedDate = DateTime.now();
   }
 
   void _recuperarEventos() async {
@@ -80,85 +83,343 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
         key: _calendarKey,
         view: _calendarView,
         dataSource: _DataSource(_eventModel),
-        onTap: (calendarTapDetails) {
+        onTap: (calendarTapDetails) async {
           if (calendarTapDetails.targetElement ==
               CalendarElement.calendarCell) {
             setState(() {
-              _seletedDate = calendarTapDetails.date;
+              _selectedDate = calendarTapDetails.date;
             });
+          } else if (calendarTapDetails.targetElement ==
+              CalendarElement.appointment) {
+            MyAppointment appointment =
+                calendarTapDetails.appointments![0] as MyAppointment;
+            _showDetailsEvent(appointment, flag);
           }
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Agregar evento',
-                    style: Theme.of(context).textTheme.bodyLarge),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Fecha para el evento: ${DateFormat('dd/MM/yyyy').format(_seletedDate!)}',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    TextFormField(
-                      style: Theme.of(context).textTheme.bodyLarge,
-                      decoration:
-                          InputDecoration(labelText: 'Descripcion del evento'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ingrese la descripcion del evento';
-                        }
-                        return null;
-                      },
-                      controller: _controller,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (_controller.text.isNotEmpty) {
-                                final event = EventModel(
-                                    descEvento: _controller.text,
-                                    fechaEvento:
-                                        _seletedDate!.toIso8601String(),
-                                    completado: 0);
-                                await databaseHelper!
-                                    .INSERT('tblEvento', event.toMap());
-                                _controller.clear();
-                                Navigator.pop(context);
-                                _recuperarEventos();
-                                setState(() {});
-                                flag.setflagListPost();
-                              }
-                            },
-                            child: Text(
-                              'Agregar',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            )),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              'Cancelar',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ))
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+          _showDialog(context, flag);
         },
         label: const Text('Add event'),
         icon: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Future<dynamic> _showDialog(BuildContext context, FlagsProvider flag) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(
+                'Crear Evento',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              content: Text(
+                '¿Deseas crear un evento para la fecha ${DateFormat.yMMMMd().format(_selectedDate!)}?',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _showAddEventDialog(context, flag);
+                    },
+                    child: Text('Aceptar')),
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Cancelar')),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<dynamic> _showAddEventDialog(
+      BuildContext context, FlagsProvider flag) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Agregar evento',
+              style: Theme.of(context).textTheme.bodyLarge),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Fecha para el evento: ${DateFormat.yMMMMd().format(_selectedDate!)}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              TextFormField(
+                style: Theme.of(context).textTheme.bodyLarge,
+                decoration:
+                    InputDecoration(labelText: 'Descripcion del evento'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Ingrese la descripcion del evento';
+                  }
+                  return null;
+                },
+                controller: _controller,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (_controller.text.isNotEmpty) {
+                          final event = EventModel(
+                              descEvento: _controller.text,
+                              fechaEvento: _selectedDate!.toIso8601String(),
+                              completado: false);
+                          await databaseHelper!
+                              .INSERT('tblEvento', event.toMap());
+                          _controller.clear();
+                          Navigator.pop(context);
+                          _recuperarEventos();
+                          setState(() {});
+                          flag.setflagListPost();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Evento agregado')),
+                          );
+                        }
+                      },
+                      child: Text(
+                        'Agregar',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      )),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Cancelar',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ))
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteEvento(int idInterfaz) async {
+    await databaseHelper!.DELETE('tblEvento', idInterfaz, 'idEvento');
+    setState(() {
+      _eventModel.removeWhere((event) => event.idEvento == idInterfaz);
+    });
+  }
+
+  void _showDetailsEvent(MyAppointment appointment, FlagsProvider flag) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 200,
+          child: Center(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Text(
+                'Detalles del evento',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Descripcion: ${appointment.subject}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              Text(
+                'Fecha: ${DateFormat.yMMMMd().format(appointment.startTime)}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton.icon(
+                      onPressed: () {
+                        eventoCompletado(appointment);
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.check),
+                      label: Text('Completar')),
+                  ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        showUpdateEvent(appointment, flag);
+                      },
+                      icon: Icon(Icons.update),
+                      label: Text('Actualizar')),
+                  ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        showDeleteEvent(appointment, flag);
+                      },
+                      icon: Icon(Icons.delete),
+                      label: Text('Eliminar'))
+                ],
+              ),
+            ]),
+          ),
+        );
+      },
+    );
+  }
+
+  void eventoCompletado(MyAppointment appointment) async {
+    await databaseHelper!.UPDATE(
+        'tblEvento',
+        {
+          'idEvento': appointment.idEvento,
+          'descEvento': appointment.subject,
+          'fechaEvento': appointment.startTime.toIso8601String(),
+          'completado': !appointment.completado,
+        },
+        'idEvento');
+
+    int index = _eventModel.indexWhere(
+      (e) => e.idEvento == appointment.idEvento,
+    );
+    _eventModel[index].completado = !appointment.completado;
+
+    setState(() {});
+  }
+
+  void showUpdateEvent(MyAppointment appointment, FlagsProvider flag) {
+    DateTime dateEvent = appointment.startTime;
+    String descEvent = appointment.subject;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Editar evento',
+              style: Theme.of(context).textTheme.bodyLarge),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Actualizar el evento',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Fecha: ',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    DateFormat.yMMMMd().format(dateEvent),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: dateEvent,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100));
+                        if (pickedDate != null && pickedDate != dateEvent) {
+                          setState(() {
+                            dateEvent = pickedDate;
+                          });
+                        }
+                      },
+                      icon: Icon(Icons.calendar_today))
+                ],
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                style: Theme.of(context).textTheme.bodyLarge,
+                decoration:
+                    InputDecoration(labelText: 'Descripcion del evento'),
+                onChanged: (value) {
+                  descEvent = value;
+                },
+                controller: TextEditingController(text: descEvent),
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                      onPressed: () async {
+                        await databaseHelper!.UPDATE(
+                            'tblEvento',
+                            {
+                              'idEvento': appointment.idEvento,
+                              'descEvento': descEvent,
+                              'fechaEvento': dateEvent.toIso8601String(),
+                              'completado': appointment.completado
+                            },
+                            'idEvento');
+                        setState(() {
+                          appointment.subject = descEvent;
+                          appointment.startTime = dateEvent;
+                          appointment.endTime = dateEvent;
+                        });
+                        Navigator.pop(context);
+                        _recuperarEventos();
+                        flag.setflagListPost();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Cambios guardados')),
+                        );
+                      },
+                      icon: Icon(Icons.save),
+                      label: Text('Guardar cambios')),
+                  ElevatedButton.icon(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Icons.cancel),
+                      label: Text('Cancelar'))
+                ],
+              )
+            ],
+          ),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+        );
+      },
+    );
+  }
+
+  void showDeleteEvent(MyAppointment appointment, FlagsProvider flag) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Eliminar evento',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          content: Text(
+            '¿Estas seguro que deseas eliminar este evento?',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () async {
+                  await databaseHelper!
+                      .DELETE('tblEvento', appointment.idEvento, 'idEvento');
+                  Navigator.pop(context);
+                  _recuperarEventos();
+                  flag.setflagListPost();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Evento eliminado')));
+                },
+                child: Text('Eliminar')),
+            ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancelar'))
+          ],
+        );
+      },
     );
   }
 }
@@ -167,12 +428,60 @@ class _DataSource extends CalendarDataSource {
   _DataSource(List<EventModel> eventModel) {
     appointments = eventModel.map((event) {
       DateTime dateTime = DateTime.parse(event.fechaEvento!);
-      return Appointment(
+      final DateTime today = DateTime.now();
+      final DateTime twoDaysAhead = today.add(Duration(days: 2));
+      Color color;
+
+      if (isToday(dateTime)) {
+        color = Colors.green;
+      } else if (dateTime.isBefore(DateTime.now()) &&
+          event.completado! == true) {
+        color = Colors.green;
+      } else if (dateTime.isBefore(DateTime.now()) &&
+          event.completado! == false) {
+        color = Colors.red;
+      } else if (dateTime.difference(DateTime.now()).inDays < 2) {
+        color = Colors.yellow;
+      } else {
+        color = Colors.blue;
+      }
+
+      return MyAppointment(
           startTime: dateTime,
-          endTime: dateTime.add(Duration(hours: 1)),
+          endTime: dateTime,
           subject: event.descEvento!,
-          isAllDay: false,
-          color: event.completado! == 1 ? Colors.grey : Colors.blue);
+          isAllDay: true,
+          color: color,
+          completado: event.completado ?? false,
+          idEvento: event.idEvento!);
     }).toList();
   }
+
+  bool isToday(DateTime dateTime) {
+    final now = DateTime.now();
+    return dateTime.year == now.year &&
+        dateTime.month == now.month &&
+        dateTime.day == now.day;
+  }
+}
+
+class MyAppointment extends Appointment {
+  bool completado;
+  int idEvento;
+
+  MyAppointment(
+      {required DateTime startTime,
+      required DateTime endTime,
+      required String subject,
+      bool isAllDay = false,
+      Color? color,
+      this.completado = false,
+      required this.idEvento})
+      : super(
+          startTime: startTime,
+          endTime: endTime,
+          subject: subject,
+          isAllDay: isAllDay,
+          color: color!,
+        );
 }
