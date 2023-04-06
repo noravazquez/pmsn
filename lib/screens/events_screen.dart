@@ -52,8 +52,8 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Mis eventos',
-          style: Theme.of(context).textTheme.bodyLarge,
+          'Mis eventos'.toUpperCase(),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         actions: [
           ToggleButtons(
@@ -86,6 +86,44 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
         onTap: (calendarTapDetails) async {
           if (calendarTapDetails.targetElement ==
               CalendarElement.calendarCell) {
+            List<MyAppointment> appointment =
+                (calendarTapDetails.appointments as List<dynamic>)
+                    .whereType<MyAppointment>()
+                    .toList();
+            if (appointment.isNotEmpty) {
+              if (appointment.length == 1) {
+                _showDetailsEvent(appointment.first, flag);
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        'Seleccione un evento',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      content: Container(
+                        width: double.maxFinite,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: appointment.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              title: Text(appointment[index].subject,
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              onTap: () {
+                                Navigator.pop(context);
+                                _showDetailsEvent(appointment[index], flag);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+            }
             setState(() {
               _selectedDate = calendarTapDetails.date;
             });
@@ -101,8 +139,8 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
         onPressed: () {
           _showDialog(context, flag);
         },
-        label: const Text('Add event'),
-        icon: const Icon(Icons.add),
+        label: Text('Add event', style: Theme.of(context).textTheme.bodyMedium),
+        icon: Icon(Icons.add, color: Theme.of(context).iconTheme.color),
       ),
     );
   }
@@ -116,7 +154,7 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
             return AlertDialog(
               title: Text(
                 'Crear Evento',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               content: Text(
                 '¿Deseas crear un evento para la fecha ${DateFormat.yMMMMd().format(_selectedDate!)}?',
@@ -128,10 +166,14 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
                       Navigator.pop(context);
                       _showAddEventDialog(context, flag);
                     },
-                    child: Text('Aceptar')),
+                    child: Text(
+                      'Aceptar',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    )),
                 TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('Cancelar')),
+                    child: Text('Cancelar',
+                        style: Theme.of(context).textTheme.bodyMedium)),
               ],
             );
           },
@@ -147,7 +189,7 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Agregar evento',
-              style: Theme.of(context).textTheme.bodyLarge),
+              style: Theme.of(context).textTheme.titleLarge),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -192,15 +234,18 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
                       },
                       child: Text(
                         'Agregar',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      )),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary)),
                   TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
                       child: Text(
                         'Cancelar',
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ))
                 ],
               ),
@@ -220,6 +265,7 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
 
   void _showDetailsEvent(MyAppointment appointment, FlagsProvider flag) {
     showModalBottomSheet(
+      backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,
       context: context,
       builder: (BuildContext context) {
         return Container(
@@ -228,7 +274,7 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               Text(
                 'Detalles del evento',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(height: 16),
               Text(
@@ -244,26 +290,44 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton.icon(
-                      onPressed: () {
-                        eventoCompletado(appointment);
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.check),
-                      label: Text('Completar')),
+                    onPressed: () {
+                      eventoCompletado(appointment);
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.check,
+                        color: Theme.of(context).iconTheme.color),
+                    label: Text('Completar',
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary),
+                  ),
                   ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        showUpdateEvent(appointment, flag);
-                      },
-                      icon: Icon(Icons.update),
-                      label: Text('Actualizar')),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showUpdateEvent(appointment, flag);
+                    },
+                    icon: Icon(Icons.update,
+                        color: Theme.of(context).iconTheme.color),
+                    label: Text('Actualizar',
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary),
+                  ),
                   ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        showDeleteEvent(appointment, flag);
-                      },
-                      icon: Icon(Icons.delete),
-                      label: Text('Eliminar'))
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showDeleteEvent(appointment, flag);
+                    },
+                    icon: Icon(Icons.delete,
+                        color: Theme.of(context).iconTheme.color),
+                    label: Text('Eliminar',
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary),
+                  )
                 ],
               ),
             ]),
@@ -280,15 +344,17 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
           'idEvento': appointment.idEvento,
           'descEvento': appointment.subject,
           'fechaEvento': appointment.startTime.toIso8601String(),
-          'completado': !appointment.completado,
+          'completado': true,
         },
         'idEvento');
 
     int index = _eventModel.indexWhere(
       (e) => e.idEvento == appointment.idEvento,
     );
-    _eventModel[index].completado = !appointment.completado;
-
+    _eventModel[index].completado = true;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Evento completado')),
+    );
     setState(() {});
   }
 
@@ -300,14 +366,10 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Editar evento',
-              style: Theme.of(context).textTheme.bodyLarge),
+              style: Theme.of(context).textTheme.titleLarge),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Actualizar el evento',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -372,12 +434,23 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
                           SnackBar(content: Text('Cambios guardados')),
                         );
                       },
-                      icon: Icon(Icons.save),
-                      label: Text('Guardar cambios')),
+                      icon: Icon(Icons.save,
+                          color: Theme.of(context).iconTheme.color),
+                      label: Text('Guardar',
+                          style: Theme.of(context).textTheme.bodyMedium),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary)),
                   ElevatedButton.icon(
-                      onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.cancel),
-                      label: Text('Cancelar'))
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.cancel,
+                        color: Theme.of(context).iconTheme.color),
+                    label: Text('Cancelar',
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary),
+                  )
                 ],
               )
             ],
@@ -396,7 +469,7 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
         return AlertDialog(
           title: Text(
             'Eliminar evento',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           content: Text(
             '¿Estas seguro que deseas eliminar este evento?',
@@ -404,19 +477,27 @@ class _EventosState extends State<Eventos> with TickerProviderStateMixin {
           ),
           actions: [
             ElevatedButton(
-                onPressed: () async {
-                  await databaseHelper!
-                      .DELETE('tblEvento', appointment.idEvento, 'idEvento');
-                  Navigator.pop(context);
-                  _recuperarEventos();
-                  flag.setflagListPost();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Evento eliminado')));
-                },
-                child: Text('Eliminar')),
+              onPressed: () async {
+                await databaseHelper!
+                    .DELETE('tblEvento', appointment.idEvento, 'idEvento');
+                Navigator.pop(context);
+                _recuperarEventos();
+                flag.setflagListPost();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('Evento eliminado')));
+              },
+              child: Text('Eliminar',
+                  style: Theme.of(context).textTheme.bodyMedium),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary),
+            ),
             ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Cancelar'))
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancelar',
+                  style: Theme.of(context).textTheme.bodyMedium),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary),
+            )
           ],
         );
       },

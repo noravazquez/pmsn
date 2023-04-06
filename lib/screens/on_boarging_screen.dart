@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
-import 'package:lottie/lottie.dart';
 import 'package:primer_proyecto/models/model_onboarding.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/widgets/on_boarding_card.dart';
@@ -135,10 +134,26 @@ class MobileScreenSkip extends StatelessWidget {
         top: 50,
         left: 20,
         child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/login');
-            },
-            child: Text('SKIP', style: Theme.of(context).textTheme.bodyLarge)));
+          onPressed: () {
+            Navigator.pushNamed(context, '/login');
+          },
+          child: const Text('SKIP',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  decorationColor: Colors.black,
+                  decorationStyle: TextDecorationStyle.solid,
+                  decorationThickness: 2.0,
+                  letterSpacing: 2.0,
+                  shadows: [
+                    Shadow(
+                        color: Colors.black,
+                        blurRadius: 2.0,
+                        offset: Offset(1.0, 1.0))
+                  ])),
+        ));
   }
 }
 
@@ -156,9 +171,21 @@ class TabletDesktopScreenSkip extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, '/login');
             },
-            child: Text(
-              'SKIP',
-              style: Theme.of(context).textTheme.bodyLarge,
-            )));
+            child: const Text('SKIP',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.none,
+                    decorationColor: Colors.black,
+                    decorationStyle: TextDecorationStyle.solid,
+                    decorationThickness: 2.0,
+                    letterSpacing: 2.0,
+                    shadows: [
+                      Shadow(
+                          color: Colors.black,
+                          blurRadius: 2.0,
+                          offset: Offset(1.0, 1.0))
+                    ]))));
   }
 }

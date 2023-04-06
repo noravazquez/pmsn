@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:primer_proyecto/provider/flags_provider.dart';
 import 'package:primer_proyecto/provider/them_provider.dart';
 import 'package:primer_proyecto/routes.dart';
-import 'package:primer_proyecto/screens/events_screen.dart';
-import 'package:primer_proyecto/screens/login_screen.dart';
 import 'package:primer_proyecto/screens/on_boarging_screen.dart';
-import 'package:primer_proyecto/settings/styles_settings.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,7 +42,7 @@ class PMSNApp extends StatelessWidget {
     return MaterialApp(
       theme: theme.getThemeData(),
       routes: getApplicationRoutes(),
-      home: LoginScreen(),
+      home: OnBoardingScreen(),
     );
   }
 }

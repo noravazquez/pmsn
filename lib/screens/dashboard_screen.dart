@@ -1,9 +1,5 @@
-import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
-import 'package:primer_proyecto/provider/them_provider.dart';
 import 'package:primer_proyecto/screens/list_post.dart';
-import 'package:primer_proyecto/settings/styles_settings.dart';
-import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({super.key});
@@ -18,8 +14,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Hola',
-          style: Theme.of(context).textTheme.bodyLarge,
+          'Hola'.toUpperCase(),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
       body: Stack(
@@ -27,19 +23,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ListPost(),
           Positioned(
               left: 20.0,
-              bottom: 20.0,
+              bottom: 18.0,
               child: ElevatedButton(
                 child: Text(
                   'Mis eventos',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/events');
                 },
                 style: ElevatedButton.styleFrom(
-                    minimumSize: Size(130, 50),
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    minimumSize: Size(130, 47),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20))),
+                        borderRadius: BorderRadius.circular(30))),
               ))
         ],
       ),
@@ -49,8 +46,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             setState(() {});
           });
         },
-        label: const Text('Add post'),
-        icon: const Icon(Icons.add_comment),
+        label: Text(
+          'Add post',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        icon: Icon(Icons.add_comment, color: Theme.of(context).iconTheme.color),
       ),
       drawer: Drawer(
         child: ListView(
@@ -74,8 +74,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               subtitle: Text('Descripcion de la practica',
                   style: Theme.of(context).textTheme.bodyLarge),
-              leading: const Icon(Icons.settings),
-              trailing: const Icon(Icons.chevron_right),
+              leading: Icon(Icons.settings,
+                  color: Theme.of(context).iconTheme.color),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).iconTheme.color),
             ),
             ListTile(
               onTap: () => Navigator.pushNamed(context, '/popular'),
@@ -83,8 +85,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 'API videos',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              leading: const Icon(Icons.movie),
-              trailing: const Icon(Icons.chevron_right),
+              leading:
+                  Icon(Icons.movie, color: Theme.of(context).iconTheme.color),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).iconTheme.color),
             )
           ],
         ),

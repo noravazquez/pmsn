@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:group_radio_button/group_radio_button.dart';
-import 'package:lottie/lottie.dart';
+import 'package:primer_proyecto/firebase/firebase_auth.dart';
 import 'package:primer_proyecto/provider/them_provider.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/widgets/loading_modal_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,15 +20,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isLoading = false;
 
-  final txtEmail = TextFormField(
-    decoration: const InputDecoration(
-        label: Text('Email user'), border: OutlineInputBorder()),
-  );
+  EmailAuth emailAuth = EmailAuth();
 
-  final txtPassword = TextFormField(
-    decoration: const InputDecoration(
-        label: Text('Password user'), border: OutlineInputBorder()),
-  );
+  TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerPassword = TextEditingController();
 
   final spaceHorizontal = SizedBox(
     height: 10,
@@ -58,6 +51,19 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeProvider theme = Provider.of<ThemeProvider>(context);
+
+    final txtEmail = TextFormField(
+      decoration: const InputDecoration(
+          label: Text('Email user'), border: OutlineInputBorder()),
+      controller: controllerEmail,
+    );
+
+    final txtPassword = TextFormField(
+      decoration: const InputDecoration(
+          label: Text('Password user'), border: OutlineInputBorder()),
+      controller: controllerPassword,
+    );
+
     final txtRegister = Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: TextButton(
@@ -65,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushNamed(context, '/register');
           },
           child: Text('Crear cuenta',
-              style: Theme.of(context).textTheme.bodyLarge)),
+              style: Theme.of(context).textTheme.labelLarge)),
     );
 
     final txtAboutUs = Padding(
@@ -74,8 +80,22 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             Navigator.pushNamed(context, '/onboarding');
           },
-          child:
-              Text('About Us', style: Theme.of(context).textTheme.bodyLarge)),
+          child: const Text('About Us',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  decorationColor: Colors.black,
+                  decorationStyle: TextDecorationStyle.solid,
+                  decorationThickness: 2.0,
+                  letterSpacing: 1.5,
+                  shadows: [
+                    Shadow(
+                        color: Colors.black,
+                        blurRadius: 2.0,
+                        offset: Offset(1.0, 1.0))
+                  ]))),
     );
 
     final btnEmail = SocialLoginButton(
@@ -88,6 +108,21 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {});
             Navigator.pushNamed(context, '/dash');
           });
+          /*isLoading = true;
+          setState(() {});
+          emailAuth
+              .signInWithEmailAndPassword(
+                  email: controllerEmail.text,
+                  password: controllerPassword.text)
+              .then((value) {
+            if (value) {
+              Navigator.pushNamed(context, '/dash');
+            } else {
+              //snackbar error
+            }
+          });
+          isLoading = false;
+          setState(() {});*/
         });
 
     final btnTheme = InkWell(
@@ -115,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Responsive(
                   mobile: MobileScreen(
                       btnTheme: btnTheme,
-                      //txtAboutUs: txtAboutUs,
+                      txtAboutUs: txtAboutUs,
                       spaceHorizontal: spaceHorizontal,
                       txtEmail: txtEmail,
                       txtPassword: txtPassword,
@@ -126,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       txtRegister: txtRegister),
                   tablet: TabletDesktopScreen(
                       btnTheme: btnTheme,
-                      //txtAboutUs: txtAboutUs,
+                      txtAboutUs: txtAboutUs,
                       spaceHorizontal: spaceHorizontal,
                       txtEmail: txtEmail,
                       txtPassword: txtPassword,
@@ -137,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       txtRegister: txtRegister),
                   desktop: TabletDesktopScreen(
                       btnTheme: btnTheme,
-                      //txtAboutUs: txtAboutUs,
+                      txtAboutUs: txtAboutUs,
                       spaceHorizontal: spaceHorizontal,
                       txtEmail: txtEmail,
                       txtPassword: txtPassword,
@@ -205,7 +240,7 @@ class MobileScreen extends StatelessWidget {
   const MobileScreen({
     super.key,
     required this.btnTheme,
-    //required this.txtAboutUs,
+    required this.txtAboutUs,
     required this.spaceHorizontal,
     required this.txtEmail,
     required this.txtPassword,
@@ -217,7 +252,7 @@ class MobileScreen extends StatelessWidget {
   });
 
   final InkWell btnTheme;
-  //final Padding txtAboutUs;
+  final Padding txtAboutUs;
   final SizedBox spaceHorizontal;
   final TextFormField txtEmail;
   final TextFormField txtPassword;
@@ -233,7 +268,7 @@ class MobileScreen extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: [
         Positioned(top: 50, left: 20, child: btnTheme),
-        //Positioned(top: 30, right: 20, child: txtAboutUs),
+        Positioned(top: 30, right: 20, child: txtAboutUs),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -262,7 +297,7 @@ class TabletDesktopScreen extends StatelessWidget {
   const TabletDesktopScreen({
     super.key,
     required this.btnTheme,
-    //required this.txtAboutUs,
+    required this.txtAboutUs,
     required this.spaceHorizontal,
     required this.txtEmail,
     required this.txtPassword,
@@ -274,7 +309,7 @@ class TabletDesktopScreen extends StatelessWidget {
   });
 
   final InkWell btnTheme;
-  //final Padding txtAboutUs;
+  final Padding txtAboutUs;
   final SizedBox spaceHorizontal;
   final TextFormField txtEmail;
   final TextFormField txtPassword;
@@ -290,7 +325,7 @@ class TabletDesktopScreen extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: [
         Positioned(top: 50, left: 15, child: btnTheme),
-        //Positioned(bottom: 30, left: 15, child: txtAboutUs),
+        Positioned(bottom: 30, left: 15, child: txtAboutUs),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -299,7 +334,7 @@ class TabletDesktopScreen extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [LogoImage(), spaceHorizontal, txtRegister],
+              children: [LogoImage(), txtRegister],
             )),
             SizedBox(
               height: 10,
@@ -309,8 +344,8 @@ class TabletDesktopScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50),
+                SizedBox(
+                  width: 400,
                   child: Column(children: [
                     txtEmail,
                     spaceHorizontal,
@@ -350,7 +385,7 @@ class LogoImage extends StatelessWidget {
             Spacer()
           ],
         ),
-        SizedBox(height: 10.0),
+        SizedBox(height: 20.0)
       ],
     );
   }

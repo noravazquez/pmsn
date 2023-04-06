@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/firebase/firebase_auth.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,6 +19,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final ImagePicker _imagePicker = ImagePicker();
 
   final _formKey = GlobalKey<FormState>();
+
+  EmailAuth emailAuth = EmailAuth();
+
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   final txtFirstName = TextFormField(
     decoration: const InputDecoration(
@@ -42,42 +48,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
         return null;
       });
-  final txtEmail = TextFormField(
-    decoration: const InputDecoration(
-        icon: Icon(Icons.email),
-        label: Text('Email: '),
-        border: OutlineInputBorder()),
-    validator: (value) {
-      if (value == null || value.isEmpty) {
-        return 'Please enter your email';
-      } else if (!EmailValidator.validate(value, true)) {
-        return 'Invalid email, please enter valid email';
-      } else {
-        return null;
-      }
-    },
-  );
-  final txtPassword = TextFormField(
-      obscureText: true,
-      decoration: const InputDecoration(
-          icon: Icon(Icons.password),
-          label: Text('Password: '),
-          border: OutlineInputBorder()),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter a password';
-        } else if (!validateStructure(value)) {
-          return 'Please enter valid password';
-        } else {
-          return null;
-        }
-      });
-  final spaceHorizontal = SizedBox(
-    height: 10,
-  );
 
   @override
   Widget build(BuildContext context) {
+    final txtEmail = TextFormField(
+      decoration: const InputDecoration(
+          icon: Icon(Icons.email),
+          label: Text('Email: '),
+          border: OutlineInputBorder()),
+      controller: email,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email';
+        } else if (!EmailValidator.validate(value, true)) {
+          return 'Invalid email, please enter valid email';
+        } else {
+          return null;
+        }
+      },
+    );
+
+    final txtPassword = TextFormField(
+        obscureText: true,
+        decoration: const InputDecoration(
+            icon: Icon(Icons.password),
+            label: Text('Password: '),
+            border: OutlineInputBorder()),
+        controller: password,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter a password';
+          } else if (!validateStructure(value)) {
+            return 'Please enter valid password';
+          } else {
+            return null;
+          }
+        });
+    final spaceHorizontal = SizedBox(
+      height: 10,
+    );
+
     final txtLogin = Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: TextButton(
@@ -85,18 +95,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Navigator.pushNamed(context, '/login');
           },
           child: Text('Already have an account? Log in',
-              style: Theme.of(context).textTheme.bodyLarge)),
+              style: Theme.of(context).textTheme.labelLarge)),
     );
     final btnRegister = SocialLoginButton(
         buttonType: SocialLoginButtonType.generalLogin,
         text: 'Sign up',
         onPressed: () {
           if (_formKey.currentState!.validate()) {
+            emailAuth?.createUserWithEmailAndPassword(
+                email: email.text, password: password.text);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Processing Data')),
             );
             Navigator.pushNamed(context, '/dash');
           }
+          ;
         });
 
     final btnPhoto = InkWell(
@@ -189,8 +202,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onTap: () {
                       selectOpction(context, ImageSource.camera);
                     },
-                    leading: const Icon(
+                    leading: Icon(
                       Icons.camera,
+                      color: Theme.of(context).iconTheme.color,
                     ),
                     title: Text(
                       'Camera',
@@ -201,9 +215,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onTap: () {
                       selectOpction(context, ImageSource.gallery);
                     },
-                    leading: const Icon(
-                      Icons.image,
-                    ),
+                    leading: Icon(Icons.image,
+                        color: Theme.of(context).iconTheme.color),
                     title: Text('Gallery',
                         style: Theme.of(context).textTheme.bodyLarge),
                   )
@@ -318,8 +331,8 @@ class TabletDesktopScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(50),
+            SizedBox(
+              width: 400,
               child: Column(
                 children: [
                   txtFirstName,

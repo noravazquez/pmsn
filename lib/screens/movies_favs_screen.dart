@@ -1,35 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/database/database_helper.dart';
 import 'package:primer_proyecto/models/popular_model.dart';
-import 'package:primer_proyecto/network/api_popular.dart';
+import 'package:primer_proyecto/provider/flags_provider.dart';
 import 'package:primer_proyecto/screens/movie_details_screen.dart';
 import 'package:primer_proyecto/widgets/item_popular.dart';
+import 'package:provider/provider.dart';
 
-class ListPopularVideo extends StatefulWidget {
-  const ListPopularVideo({super.key});
+class MoviesFavsScreen extends StatefulWidget {
+  const MoviesFavsScreen({super.key});
 
   @override
-  State<ListPopularVideo> createState() => _ListPopularVideoState();
+  State<MoviesFavsScreen> createState() => _MoviesFavsScreenState();
 }
 
-class _ListPopularVideoState extends State<ListPopularVideo> {
-  ApiPopular? apiPopular;
+class _MoviesFavsScreenState extends State<MoviesFavsScreen> {
+  late Future<List<PopularModel>> _favsMovies;
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   @override
   void initState() {
     super.initState();
-    apiPopular = ApiPopular();
+    listMoviesFavs();
+  }
+
+  Future<void> listMoviesFavs() async {
+    final databaseHelper = DatabaseHelper();
+    _favsMovies = databaseHelper.getAllMovies();
   }
 
   @override
   Widget build(BuildContext context) {
+    FlagsProvider flag = Provider.of<FlagsProvider>(context);
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        'Movies'.toUpperCase(),
+        'Favorite Movies',
         style: Theme.of(context).textTheme.titleLarge,
       )),
       body: FutureBuilder(
-          future: apiPopular!.getAllPopular(),
+          future: _favsMovies,
           builder: (context, AsyncSnapshot<List<PopularModel>?> snapshot) {
             if (snapshot.hasData) {
               return GridView.builder(
@@ -48,7 +58,8 @@ class _ListPopularVideoState extends State<ListPopularVideo> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => MovieDetails(
-                                popularModel: snapshot.data![index]),
+                                popularModel: snapshot.data![index],
+                                updateFavsMovies: updateFavsMovies),
                           ));
                     },
                   );
@@ -62,15 +73,12 @@ class _ListPopularVideoState extends State<ListPopularVideo> {
               return const CircularProgressIndicator();
             }
           }),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          setState(() {
-            Navigator.pushNamed(context, '/moviesFavs');
-          });
-        },
-        label: const Text(''),
-        icon: Icon(Icons.favorite, color: Theme.of(context).iconTheme.color),
-      ),
     );
+  }
+
+  Future<void> updateFavsMovies() async {
+    setState(() {
+      _favsMovies = databaseHelper.getAllMovies();
+    });
   }
 }

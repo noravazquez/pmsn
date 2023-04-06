@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:primer_proyecto/models/event_model.dart';
+import 'package:primer_proyecto/models/popular_model.dart';
 import 'package:primer_proyecto/models/post_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   static final nameDB = 'SOCIALDB';
-  static final versionDB = 9;
+  static final versionDB = 11;
 
   static Database? _database;
 
@@ -43,6 +44,18 @@ class DatabaseHelper {
       );
     ''';
     await db.execute(query2);
+    String query3 = '''CREATE TABLE tblMoviesFavs(id INTEGER, 
+            backdrop_path TEXT, 
+            original_language TEXT, 
+            original_title TEXT, 
+            overview TEXT, 
+            popularity REAL, 
+            poster_path TEXT, 
+            release_date TEXT, 
+            title TEXT, 
+            vote_average REAL, 
+            vote_count INTEGER)''';
+    await db.execute(query3);
   }
 
   Future<int> INSERT(String tblName, Map<String, dynamic> data) async {
@@ -92,5 +105,21 @@ class DatabaseHelper {
       eventos = result.map((evento) => EventModel.fromMap(evento)).toList();
     }
     return eventos;
+  }
+
+  Future<List<PopularModel>> getAllMovies() async {
+    var conexion = await database;
+    var result = await conexion.query('tblMoviesFavs');
+    return result.map((movie) => PopularModel.fromMap(movie)).toList();
+  }
+
+  Future<bool> searchMovie(int idMovie) async {
+    var conexion = await database;
+    var query = "SELECT * FROM tblMoviesFavs where id=?";
+    var result = await conexion.rawQuery(query, [idMovie]);
+    if (result != null && result.isNotEmpty) {
+      return true;
+    }
+    return false;
   }
 }
