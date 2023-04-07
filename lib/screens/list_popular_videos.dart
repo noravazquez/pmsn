@@ -42,7 +42,10 @@ class _ListPopularVideoState extends State<ListPopularVideo> {
                 itemCount: snapshot.data != null ? snapshot.data!.length : 0,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    child: ItemPopular(popularModel: snapshot.data![index]),
+                    child: Hero(
+                        tag: snapshot.data![index],
+                        child:
+                            ItemPopular(popularModel: snapshot.data![index])),
                     onTap: () {
                       Navigator.push(
                           context,

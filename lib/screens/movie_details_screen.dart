@@ -98,7 +98,7 @@ class MovieDetails extends StatelessWidget {
                                           return ActorInfo(
                                             name: actorsMovie.name!,
                                             photoUrl:
-                                                'https://image.tmdb.org/t/p/original${actorsMovie.profilePath}',
+                                                'https://image.tmdb.org/t/p/original/${actorsMovie.profilePath}',
                                           );
                                         },
                                       ),
@@ -167,7 +167,9 @@ class MovieDetails extends StatelessWidget {
                           databaseHelper
                               .DELETE('tblMoviesFavs', popularModel.id!, 'id')
                               .then((value) => flag.setflagListPost());
-                          updateFavsMovies!();
+                          if (updateFavsMovies != null) {
+                            updateFavsMovies!();
+                          }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content:
@@ -208,26 +210,16 @@ class ActorInfo extends StatelessWidget {
       child: Column(
         children: [
           ClipOval(
-            child: Builder(
-              builder: (context) {
-                try {
-                  return Image.network(
-                    photoUrl,
-                    width: 70,
-                    height: 70,
-                    fit: BoxFit.cover,
-                  );
-                } on NetworkImageLoadException {
-                  return Image.asset(
-                    'assets/actor_default.png',
-                    width: 70,
-                    height: 70,
-                    fit: BoxFit.cover,
-                  );
-                }
-              },
-            ),
-          ),
+              child: photoUrl.endsWith("null")
+                  ? Image.asset('assets/actor_default.png',
+                      width: 70, height: 85, fit: BoxFit.fill)
+                  : FadeInImage(
+                      width: 70,
+                      height: 85,
+                      fit: BoxFit.fill,
+                      placeholder: const AssetImage('assets/actor_default.png'),
+                      image: NetworkImage(photoUrl),
+                    )),
           SizedBox(height: 10),
           Text(name, style: Theme.of(context).textTheme.bodyLarge),
         ],

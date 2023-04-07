@@ -14,12 +14,13 @@ class MovieTrailer extends StatelessWidget {
     return Container(
       height: 250,
       child: FutureBuilder(
-        future: apiPopular.getIdVideo(popularModel.id!),
+        future: apiPopular.getTrailer(popularModel.id!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            final trailer = snapshot.data!;
             return YoutubePlayer(
               controller: YoutubePlayerController(
-                  initialVideoId: snapshot.data.toString(),
+                  initialVideoId: trailer['key'],
                   flags: YoutubePlayerFlags(
                       autoPlay: true,
                       mute: false,
