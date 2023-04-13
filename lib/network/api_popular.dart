@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:primer_proyecto/models/popular_model.dart';
-import 'package:primer_proyecto/widgets/actors_movie.dart';
+import 'package:primer_proyecto/models/actors_movie.dart';
 
 class ApiPopular {
   Uri link = Uri.parse(

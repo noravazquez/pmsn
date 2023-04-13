@@ -89,6 +89,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Icon(Icons.movie, color: Theme.of(context).iconTheme.color),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).iconTheme.color),
+            ),
+            ListTile(
+              onTap: () => Navigator.pushNamed(context, '/categoryBooks'),
+              title: Text(
+                'API libros',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              leading:
+                  Icon(Icons.book, color: Theme.of(context).iconTheme.color),
+              trailing: Icon(Icons.chevron_right,
+                  color: Theme.of(context).iconTheme.color),
             )
           ],
         ),

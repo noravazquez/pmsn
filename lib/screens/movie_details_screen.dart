@@ -7,7 +7,7 @@ import 'package:primer_proyecto/network/api_popular.dart';
 import 'package:primer_proyecto/provider/flags_provider.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/screens/movies_favs_screen.dart';
-import 'package:primer_proyecto/widgets/actors_movie.dart';
+import 'package:primer_proyecto/models/actors_movie.dart';
 import 'package:primer_proyecto/widgets/backdrop_trailer.dart';
 import 'package:provider/provider.dart';
 

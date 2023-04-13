@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:primer_proyecto/screens/add_post_screen.dart';
+import 'package:primer_proyecto/screens/category_screen.dart';
 import 'package:primer_proyecto/screens/dashboard_screen.dart';
 import 'package:primer_proyecto/screens/events_screen.dart';
 import 'package:primer_proyecto/screens/list_popular_videos.dart';
@@ -17,6 +18,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     '/add': (BuildContext context) => AddPostScreen(),
     '/events': (BuildContext context) => Eventos(),
     '/popular': (BuildContext context) => ListPopularVideo(),
-    '/moviesFavs': (BuildContext context) => MoviesFavsScreen()
+    '/moviesFavs': (BuildContext context) => MoviesFavsScreen(),
+    '/categoryBooks': (BuildContext context) => CategoryScreen(),
   };
 }
