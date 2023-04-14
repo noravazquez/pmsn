@@ -12,8 +12,7 @@ class BooksModel {
 
   factory BooksModel.fromMap(Map<String, dynamic> map) {
     return BooksModel(
-        id: map['id'],
-        volumeInfo: VolumeInfo.fromMap(jsonDecode(map['volumeInfo'])));
+        id: map['id'], volumeInfo: VolumeInfo.fromMap(map['volumeInfo']));
   }
 }
 
@@ -47,13 +46,18 @@ class VolumeInfo {
   factory VolumeInfo.fromMap(Map<String, dynamic> map) {
     return VolumeInfo(
         title: map['title'],
-        authors: map['authors'],
+        authors: (map['authors'] as List<dynamic>?)?.cast<String>(),
         publisher: map['publisher'],
         publishedDate: map['publishedDate'],
         description: map['description'],
         pageCount: map['pageCount'],
-        categories: map['categories'],
-        averageRating: map['averageRating'],
+        categories: (map['categories'] as List<dynamic>?)?.cast<String>(),
+        averageRating: (map['averageRating'] is int)
+            ? (map['averageRating'] as int).toDouble()
+            : map['averageRating'],
+        /*voteAverage: (map['vote_average'] is int)
+            ? (map['vote_average'] as int).toDouble()
+            : map['vote_average'],*/
         imageLinks: ImageLinks.fromMap(map['imageLinks']),
         language: map['language'],
         previewLink: map['previewLink']);
