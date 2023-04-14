@@ -31,7 +31,7 @@ class ItemBookCard extends StatelessWidget {
           height: 10.0,
         ),
         Text(
-          book.volumeInfo!.authors!.join(', ') ?? '',
+          book.volumeInfo?.authors?.join(', ') ?? '',
           style: Theme.of(context).textTheme.bodyLarge,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

@@ -55,9 +55,6 @@ class VolumeInfo {
         averageRating: (map['averageRating'] is int)
             ? (map['averageRating'] as int).toDouble()
             : map['averageRating'],
-        /*voteAverage: (map['vote_average'] is int)
-            ? (map['vote_average'] as int).toDouble()
-            : map['vote_average'],*/
         imageLinks: ImageLinks.fromMap(map['imageLinks']),
         language: map['language'],
         previewLink: map['previewLink']);

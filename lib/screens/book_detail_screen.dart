@@ -44,7 +44,6 @@ class BookDetailScreen extends StatelessWidget {
                 child: Text(
                   book.volumeInfo!.title!.toUpperCase(),
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      //fontWeight: FontWeight.bold,
                       shadows: [
                         Shadow(
                             color: Colors.black,
@@ -56,9 +55,12 @@ class BookDetailScreen extends StatelessWidget {
             ),
             SizedBox(height: 10.0),
             Center(
-              child: Text(
-                book.volumeInfo!.authors!.join(', '),
-                style: Theme.of(context).textTheme.labelLarge,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  book.volumeInfo?.authors?.join(', ') ?? "",
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
               ),
             ),
             SizedBox(height: 20.0),
@@ -66,7 +68,6 @@ class BookDetailScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   launchUrl(Uri.parse(book.volumeInfo!.previewLink!));
-                  link(book.volumeInfo!.previewLink!);
                 },
                 child: Text(
                   'Preview Book',
@@ -80,6 +81,27 @@ class BookDetailScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.0),
+            RatingStars(
+              rating: book.volumeInfo?.averageRating ?? 0,
+            ),
+            SizedBox(height: 20.0),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Column(children: [
+                  Text(
+                    'Descripción: ',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    book.volumeInfo!.description!,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ]),
+              ),
+            ),
+            SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -87,49 +109,129 @@ class BookDetailScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 8.0),
                   Text(
-                    'Publisher: ${book.volumeInfo!.publisher ?? 'Unknown'}',
-                    style: Theme.of(context).textTheme.bodyText2,
+                    'Editorial: ${book.volumeInfo!.publisher ?? 'Unknown'}',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(height: 8.0),
                   Text(
-                    'Published Date: ${book.volumeInfo!.publishedDate ?? 'Unknown'}',
-                    style: Theme.of(context).textTheme.bodyText2,
+                    'Fecha de publicación: ${book.volumeInfo!.publishedDate ?? 'Unknown'}',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(height: 8.0),
                   Text(
-                    'Page Count: ${book.volumeInfo!.pageCount ?? 'Unknown'}',
-                    style: Theme.of(context).textTheme.bodyText2,
+                    'Número de páginas: ${book.volumeInfo!.pageCount ?? 'Unknown'}',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   SizedBox(height: 8.0),
                   Text(
-                    'Categories: ${book.volumeInfo!.categories?.join(', ') ?? 'Unknown'}',
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    'Average Rating: ${book.volumeInfo!.averageRating ?? 'Unknown'}',
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    'Language: ${book.volumeInfo!.language ?? 'Unknown'}',
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
-                  SizedBox(height: 20.0),
-                  Text(
-                    book.volumeInfo!.description!,
-                    style: Theme.of(context).textTheme.bodyText1,
+                    'Lenguaje: ${book.volumeInfo!.language ?? 'Unknown'}',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
             ),
+            SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Wrap(
+                spacing: 8.0, // Espacio entre categorías
+                children: book.volumeInfo?.categories?.map((category) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Theme.of(context).colorScheme.primary),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          category,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      );
+                    }).toList() ??
+                    [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Theme.of(context).colorScheme.primary),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          'Unknown',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ],
+              ),
+            ),
+            SizedBox(height: 20.0),
           ],
         ),
       ),
     );
   }
+}
 
-  link(String? s) {
-    print(s);
+class RatingStars extends StatelessWidget {
+  final double? rating;
+  final double starSize;
+  final Color starColor;
+
+  const RatingStars({
+    Key? key,
+    this.rating,
+    this.starSize = 30.0,
+    this.starColor = Colors.yellow,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (rating == null || rating == 0) {
+      return Center(
+          child: Text('Unknown', style: Theme.of(context).textTheme.bodyLarge));
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _buildStar(1),
+            _buildStar(2),
+            _buildStar(3),
+            _buildStar(4),
+            _buildStar(5),
+          ],
+        ),
+        SizedBox(height: 8.0),
+        Text(
+          rating.toString(),
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStar(int index) {
+    IconData iconData = Icons.star_border;
+    Color iconColor = Colors.grey.shade400;
+
+    if (index <= rating!) {
+      iconData = Icons.star;
+      iconColor = starColor;
+    } else if (index - rating! <= 0.5) {
+      iconData = Icons.star_half;
+      iconColor = starColor;
+    }
+
+    return Icon(
+      iconData,
+      size: starSize,
+      color: iconColor,
+    );
   }
 }
