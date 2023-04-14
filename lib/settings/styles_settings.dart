@@ -15,7 +15,8 @@ class StylesSettings {
                 fontWeight: FontWeight.bold),
             bodyLarge: TextStyle(color: Colors.black),
             labelLarge: TextStyle(fontSize: 18.0, color: Colors.black),
-            titleLarge: TextStyle(fontSize: 20.0, color: Colors.black)));
+            titleLarge: TextStyle(fontSize: 20.0, color: Colors.black),
+            titleMedium: TextStyle(fontSize: 22.0, color: Colors.black)));
   }
 
   static ThemeData darkTheme(BuildContext? context) {
@@ -32,7 +33,8 @@ class StylesSettings {
                 fontWeight: FontWeight.bold),
             bodyLarge: TextStyle(color: Colors.white),
             labelLarge: TextStyle(fontSize: 18.0, color: Colors.white),
-            titleLarge: TextStyle(fontSize: 20.0, color: Colors.white60)));
+            titleLarge: TextStyle(fontSize: 20.0, color: Colors.white60),
+            titleMedium: TextStyle(fontSize: 22.0, color: Colors.white70)));
   }
 
   static ThemeData skyTheme(BuildContext? context) {
@@ -54,7 +56,9 @@ class StylesSettings {
           labelLarge:
               TextStyle(fontSize: 18.0, color: Color.fromRGBO(79, 91, 103, 1)),
           titleLarge: TextStyle(
-              fontSize: 20.0, color: Color.fromRGBO(101, 120, 137, 1))),
+              fontSize: 20.0, color: Color.fromRGBO(101, 120, 137, 1)),
+          titleMedium: TextStyle(
+              fontSize: 22.0, color: Color.fromRGBO(101, 120, 137, 1))),
     );
   }
 }

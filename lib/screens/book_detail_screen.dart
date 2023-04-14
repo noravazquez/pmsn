@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:primer_proyecto/models/books_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookDetailScreen extends StatelessWidget {
   const BookDetailScreen({super.key, required this.book});
@@ -20,12 +21,61 @@ class BookDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              decoration: BoxDecoration(),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50)),
+                  image: DecorationImage(
+                      image: AssetImage('assets/fondo.jpg'),
+                      fit: BoxFit.cover,
+                      opacity: 0.4)),
+              child: SizedBox(
+                height: 200.0,
+                child: Image.network(
+                  book.volumeInfo!.imageLinks!.thumbnail!,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
             ),
-            SizedBox(
-              height: 300.0,
-              child: Image.network(
-                book.volumeInfo!.imageLinks!.thumbnail!,
+            SizedBox(height: 20.0),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  book.volumeInfo!.title!.toUpperCase(),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      //fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                            color: Colors.black,
+                            blurRadius: 2.0,
+                            offset: Offset(1.5, 1.5))
+                      ]),
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Center(
+              child: Text(
+                book.volumeInfo!.authors!.join(', '),
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            SizedBox(height: 20.0),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  launchUrl(Uri.parse(book.volumeInfo!.previewLink!));
+                },
+                child: Text(
+                  'Preview Book',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30))),
               ),
             ),
             SizedBox(height: 20.0),
@@ -34,15 +84,6 @@ class BookDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    book.volumeInfo!.title!,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    book.volumeInfo!.authors!.join(', '),
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
                   SizedBox(height: 8.0),
                   Text(
                     'Publisher: ${book.volumeInfo!.publisher ?? 'Unknown'}',
@@ -77,11 +118,6 @@ class BookDetailScreen extends StatelessWidget {
                   Text(
                     book.volumeInfo!.description!,
                     style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Preview Book'),
                   ),
                 ],
               ),
