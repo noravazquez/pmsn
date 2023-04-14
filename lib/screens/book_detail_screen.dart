@@ -66,6 +66,7 @@ class BookDetailScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   launchUrl(Uri.parse(book.volumeInfo!.previewLink!));
+                  link(book.volumeInfo!.previewLink!);
                 },
                 child: Text(
                   'Preview Book',
@@ -126,5 +127,9 @@ class BookDetailScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  link(String? s) {
+    print(s);
   }
 }
