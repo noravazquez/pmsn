@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:group_radio_button/group_radio_button.dart';
+import 'package:primer_proyecto/firebase/facebook_auth.dart';
 import 'package:primer_proyecto/firebase/firebase_auth.dart';
+import 'package:primer_proyecto/firebase/google_auth.dart';
 import 'package:primer_proyecto/provider/them_provider.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:primer_proyecto/widgets/loading_modal_widget.dart';
@@ -22,19 +24,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   EmailAuth emailAuth = EmailAuth();
 
+  FacebookAuthentication facebookAuthentication = FacebookAuthentication();
+  GoogleAuthentication googleAuthentication = GoogleAuthentication();
+
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
 
   final spaceHorizontal = SizedBox(
     height: 10,
   );
-
-  final btnGoogle = SocialLoginButton(
-      buttonType: SocialLoginButtonType.google, onPressed: () {});
-  final btnFacebook = SocialLoginButton(
-      buttonType: SocialLoginButtonType.facebook, onPressed: () {});
-  final btnGithub = SocialLoginButton(
-      buttonType: SocialLoginButtonType.github, onPressed: () {});
 
   final imageLogo = Image.asset('assets/logo.png');
 
@@ -59,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final txtPassword = TextFormField(
+      obscureText: true,
       decoration: const InputDecoration(
           label: Text('Password user'), border: OutlineInputBorder()),
       controller: controllerPassword,
@@ -103,26 +102,31 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () {
           isLoading = true;
           setState(() {});
-          Future.delayed(Duration(milliseconds: 4000)).then((value) {
+          /*Future.delayed(Duration(milliseconds: 4000)).then((value) {
             isLoading = false;
             setState(() {});
             Navigator.pushNamed(context, '/dash');
-          });
-          /*isLoading = true;
-          setState(() {});
+          });*/
+          print(controllerEmail.text);
+          print(controllerPassword.text);
           emailAuth
               .signInWithEmailAndPassword(
                   email: controllerEmail.text,
                   password: controllerPassword.text)
               .then((value) {
             if (value) {
+              isLoading = false;
+              setState(() {});
               Navigator.pushNamed(context, '/dash');
             } else {
+              isLoading = false;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('El correo no esta registrado')),
+              );
+              setState(() {});
               //snackbar error
             }
           });
-          isLoading = false;
-          setState(() {});*/
         });
 
     final btnTheme = InkWell(
@@ -134,6 +138,44 @@ class _LoginScreenState extends State<LoginScreen> {
         size: 40.0,
       ),
     );
+
+    final btnFacebook = SocialLoginButton(
+        buttonType: SocialLoginButtonType.facebook,
+        onPressed: () async {
+          isLoading = true;
+          setState(() {});
+          facebookAuthentication.signInWithFacebook().then((value) {
+            if (value.name != null) {
+              Navigator.pushNamed(context, '/dash', arguments: value);
+              isLoading = false;
+            } else {
+              isLoading = false;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Verifica tu cuenta')),
+              );
+            }
+            setState(() {});
+          });
+        });
+
+    final btnGoogle = SocialLoginButton(
+        buttonType: SocialLoginButtonType.google,
+        onPressed: () async {
+          isLoading = true;
+          setState(() {});
+          await googleAuthentication.signInWithGoogle().then((value) {
+            if (value.name != null) {
+              isLoading = false;
+              Navigator.pushNamed(context, '/dash', arguments: value);
+            } else {
+              isLoading = false;
+              setState(() {});
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Verifica tu cuenta')),
+              );
+            }
+          });
+        });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -157,7 +199,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       btnEmail: btnEmail,
                       btnGoogle: btnGoogle,
                       btnFacebook: btnFacebook,
-                      btnGithub: btnGithub,
                       txtRegister: txtRegister),
                   tablet: TabletDesktopScreen(
                       btnTheme: btnTheme,
@@ -168,7 +209,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       btnEmail: btnEmail,
                       btnGoogle: btnGoogle,
                       btnFacebook: btnFacebook,
-                      btnGithub: btnGithub,
                       txtRegister: txtRegister),
                   desktop: TabletDesktopScreen(
                       btnTheme: btnTheme,
@@ -179,7 +219,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       btnEmail: btnEmail,
                       btnGoogle: btnGoogle,
                       btnFacebook: btnFacebook,
-                      btnGithub: btnGithub,
                       txtRegister: txtRegister)),
             ),
           ),
@@ -247,7 +286,6 @@ class MobileScreen extends StatelessWidget {
     required this.btnEmail,
     required this.btnGoogle,
     required this.btnFacebook,
-    required this.btnGithub,
     required this.txtRegister,
   });
 
@@ -259,7 +297,6 @@ class MobileScreen extends StatelessWidget {
   final SocialLoginButton btnEmail;
   final SocialLoginButton btnGoogle;
   final SocialLoginButton btnFacebook;
-  final SocialLoginButton btnGithub;
   final Padding txtRegister;
 
   @override
@@ -283,8 +320,6 @@ class MobileScreen extends StatelessWidget {
             spaceHorizontal,
             btnFacebook,
             spaceHorizontal,
-            btnGithub,
-            spaceHorizontal,
             txtRegister
           ],
         ),
@@ -304,7 +339,6 @@ class TabletDesktopScreen extends StatelessWidget {
     required this.btnEmail,
     required this.btnGoogle,
     required this.btnFacebook,
-    required this.btnGithub,
     required this.txtRegister,
   });
 
@@ -316,7 +350,6 @@ class TabletDesktopScreen extends StatelessWidget {
   final SocialLoginButton btnEmail;
   final SocialLoginButton btnGoogle;
   final SocialLoginButton btnFacebook;
-  final SocialLoginButton btnGithub;
   final Padding txtRegister;
 
   @override
@@ -356,8 +389,6 @@ class TabletDesktopScreen extends StatelessWidget {
                     btnGoogle,
                     spaceHorizontal,
                     btnFacebook,
-                    spaceHorizontal,
-                    btnGithub,
                   ]),
                 ),
               ],

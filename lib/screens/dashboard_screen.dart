@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/firebase/facebook_auth.dart';
+import 'package:primer_proyecto/models/user_model.dart';
 import 'package:primer_proyecto/screens/list_post.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -9,8 +11,15 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  FacebookAuthentication facebookAuthentication = FacebookAuthentication();
+  UserModel? userModel;
+
   @override
   Widget build(BuildContext context) {
+    if (ModalRoute.of(context)!.settings.arguments != null) {
+      userModel = ModalRoute.of(context)!.settings.arguments as UserModel;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -56,15 +65,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-                currentAccountPicture: const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      'https://static.vecteezy.com/system/resources/previews/004/749/962/non_2x/lynx-head-mascot-sport-logo-vector.jpg'),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage(userModel!.photoURL.toString()),
                 ),
                 accountName: Text(
-                  'Nora',
+                  userModel!.name.toString(),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                accountEmail: Text('vazquez.nora.g@gmail.com',
+                accountEmail: Text(userModel!.email.toString(),
                     style: Theme.of(context).textTheme.bodyLarge)),
             ListTile(
               onTap: () {},
@@ -100,7 +108,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Icon(Icons.book, color: Theme.of(context).iconTheme.color),
               trailing: Icon(Icons.chevron_right,
                   color: Theme.of(context).iconTheme.color),
-            )
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              title: const Text('Logout'),
+              leading: const Icon(Icons.logout),
+            ),
           ],
         ),
       ),

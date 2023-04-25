@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:primer_proyecto/firebase/facebook_auth.dart';
 import 'package:primer_proyecto/firebase/firebase_auth.dart';
+import 'package:primer_proyecto/firebase/google_auth.dart';
 import 'package:primer_proyecto/responsive.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,32 +24,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   EmailAuth emailAuth = EmailAuth();
 
+  FacebookAuthentication facebookAuthentication = FacebookAuthentication();
+  GoogleAuthentication googleAuthentication = GoogleAuthentication();
+
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  final txtFirstName = TextFormField(
+  final txtName = TextFormField(
     decoration: const InputDecoration(
         icon: Icon(Icons.person),
-        label: Text('First Name: '),
+        label: Text('Name: '),
         border: OutlineInputBorder()),
     validator: (value) {
       if (value == null || value.isEmpty) {
-        return 'Please enter your first name';
+        return 'Please enter your name';
       }
       return null;
     },
   );
-  final txtLastName = TextFormField(
-      decoration: const InputDecoration(
-          icon: Icon(Icons.person),
-          label: Text('Last Name: '),
-          border: OutlineInputBorder()),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your last name';
-        }
-        return null;
-      });
 
   @override
   Widget build(BuildContext context) {
@@ -102,14 +96,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
         text: 'Sign up',
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            emailAuth?.createUserWithEmailAndPassword(
-                email: email.text, password: password.text);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Processing Data')),
-            );
-            Navigator.pushNamed(context, '/dash');
+            emailAuth
+                .createUserWithEmailAndPassword(
+                    email: email.text, password: password.text)
+                .then((value) {
+              if (value) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Usuario registrado correctamente')),
+                );
+                Navigator.pushNamed(context, '/dash');
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text(
+                          'Ya existe un usuario registrado con esta cuenta')),
+                );
+              }
+            });
           }
-          ;
         });
 
     final btnPhoto = InkWell(
@@ -130,6 +135,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ? photo
           : Image.file(File(_imageFile!.path.toString())).image,
       backgroundColor: Colors.white10,
+    );
+
+    final btnGoogle = SocialLoginButton(
+      buttonType: SocialLoginButtonType.google,
+      text: 'Continue with Google',
+      onPressed: () {
+        googleAuthentication.signUpWithGoogle().then((value) {
+          if (value == 1) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Registro exitoso')),
+            );
+          } else if (value == 2) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('La cuenta ya esta registrada')),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Ocurrio un error')),
+            );
+          }
+        });
+      },
+    );
+
+    final btnFacebook = SocialLoginButton(
+      buttonType: SocialLoginButtonType.facebook,
+      text: 'Continue with Facebook',
+      onPressed: () {
+        facebookAuthentication.signUpWithFacebook().then((value) {
+          if (value == 1) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Registro exitoso')),
+            );
+          } else if (value == 2) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('La cuenta ya esta registrada')),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Ocurrio un error')),
+            );
+          }
+        });
+      },
     );
 
     return Scaffold(
@@ -154,31 +203,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               imgAvatar: imgAvatar,
                               btnPhoto: btnPhoto,
                               spaceHorizontal: spaceHorizontal,
-                              txtFirstName: txtFirstName,
-                              txtLastName: txtLastName,
+                              txtName: txtName,
                               txtEmail: txtEmail,
                               txtPassword: txtPassword,
                               btnRegister: btnRegister,
+                              btnGoogle: btnGoogle,
+                              btnFacebook: btnFacebook,
                               txtLogin: txtLogin),
                           tablet: TabletDesktopScreen(
                               imgAvatar: imgAvatar,
                               btnPhoto: btnPhoto,
                               spaceHorizontal: spaceHorizontal,
-                              txtFirstName: txtFirstName,
-                              txtLastName: txtLastName,
+                              txtName: txtName,
                               txtEmail: txtEmail,
                               txtPassword: txtPassword,
                               btnRegister: btnRegister,
+                              btnGoogle: btnGoogle,
+                              btnFacebook: btnFacebook,
                               txtLogin: txtLogin),
                           desktop: TabletDesktopScreen(
                               imgAvatar: imgAvatar,
                               btnPhoto: btnPhoto,
                               spaceHorizontal: spaceHorizontal,
-                              txtFirstName: txtFirstName,
-                              txtLastName: txtLastName,
+                              txtName: txtName,
                               txtEmail: txtEmail,
                               txtPassword: txtPassword,
                               btnRegister: btnRegister,
+                              btnGoogle: btnGoogle,
+                              btnFacebook: btnFacebook,
                               txtLogin: txtLogin))),
                 ],
               ),
@@ -242,22 +294,24 @@ class MobileScreen extends StatelessWidget {
     required this.imgAvatar,
     required this.btnPhoto,
     required this.spaceHorizontal,
-    required this.txtFirstName,
-    required this.txtLastName,
+    required this.txtName,
     required this.txtEmail,
     required this.txtPassword,
     required this.btnRegister,
+    required this.btnGoogle,
+    required this.btnFacebook,
     required this.txtLogin,
   });
 
   final CircleAvatar imgAvatar;
   final InkWell btnPhoto;
   final SizedBox spaceHorizontal;
-  final TextFormField txtFirstName;
-  final TextFormField txtLastName;
+  final TextFormField txtName;
   final TextFormField txtEmail;
   final TextFormField txtPassword;
   final SocialLoginButton btnRegister;
+  final SocialLoginButton btnGoogle;
+  final SocialLoginButton btnFacebook;
   final Padding txtLogin;
 
   @override
@@ -268,15 +322,17 @@ class MobileScreen extends StatelessWidget {
         imgAvatar,
         btnPhoto,
         spaceHorizontal,
-        txtFirstName,
-        spaceHorizontal,
-        txtLastName,
+        txtName,
         spaceHorizontal,
         txtEmail,
         spaceHorizontal,
         txtPassword,
         spaceHorizontal,
         btnRegister,
+        spaceHorizontal,
+        btnGoogle,
+        spaceHorizontal,
+        btnFacebook,
         spaceHorizontal,
         txtLogin
       ],
@@ -290,22 +346,24 @@ class TabletDesktopScreen extends StatelessWidget {
     required this.imgAvatar,
     required this.btnPhoto,
     required this.spaceHorizontal,
-    required this.txtFirstName,
-    required this.txtLastName,
+    required this.txtName,
     required this.txtEmail,
     required this.txtPassword,
     required this.btnRegister,
+    required this.btnGoogle,
+    required this.btnFacebook,
     required this.txtLogin,
   });
 
   final CircleAvatar imgAvatar;
   final InkWell btnPhoto;
   final SizedBox spaceHorizontal;
-  final TextFormField txtFirstName;
-  final TextFormField txtLastName;
+  final TextFormField txtName;
   final TextFormField txtEmail;
   final TextFormField txtPassword;
   final SocialLoginButton btnRegister;
+  final SocialLoginButton btnGoogle;
+  final SocialLoginButton btnFacebook;
   final Padding txtLogin;
 
   @override
@@ -323,7 +381,12 @@ class TabletDesktopScreen extends StatelessWidget {
             spaceHorizontal,
             btnPhoto,
             spaceHorizontal,
-            txtLogin
+            spaceHorizontal,
+            btnRegister,
+            spaceHorizontal,
+            btnGoogle,
+            spaceHorizontal,
+            btnFacebook
           ],
         )),
         Expanded(
@@ -335,15 +398,13 @@ class TabletDesktopScreen extends StatelessWidget {
               width: 400,
               child: Column(
                 children: [
-                  txtFirstName,
-                  spaceHorizontal,
-                  txtLastName,
+                  txtName,
                   spaceHorizontal,
                   txtEmail,
                   spaceHorizontal,
                   txtPassword,
                   spaceHorizontal,
-                  btnRegister
+                  txtLogin,
                 ],
               ),
             ),
