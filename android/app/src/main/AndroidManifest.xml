@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.primer_proyecto">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+    <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
+    </queries>
    <application
         android:label="primer_proyecto"
         android:name="${applicationName}"

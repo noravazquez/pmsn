@@ -3,6 +3,7 @@ import 'package:primer_proyecto/screens/add_post_screen.dart';
 import 'package:primer_proyecto/screens/category_screen.dart';
 import 'package:primer_proyecto/screens/dashboard_screen.dart';
 import 'package:primer_proyecto/screens/events_screen.dart';
+import 'package:primer_proyecto/screens/list_favorites_cloud.dart';
 import 'package:primer_proyecto/screens/list_popular_videos.dart';
 import 'package:primer_proyecto/screens/login_screen.dart';
 import 'package:primer_proyecto/screens/movies_favs_screen.dart';
@@ -20,5 +21,6 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     '/popular': (BuildContext context) => ListPopularVideo(),
     '/moviesFavs': (BuildContext context) => MoviesFavsScreen(),
     '/categoryBooks': (BuildContext context) => CategoryScreen(),
+    '/favorites': (BuildContext context) => ListFavoritesCloud()
   };
 }

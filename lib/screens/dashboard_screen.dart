@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:primer_proyecto/firebase/facebook_auth.dart';
 import 'package:primer_proyecto/models/user_model.dart';
+import 'package:primer_proyecto/screens/list_favorites_cloud.dart';
 import 'package:primer_proyecto/screens/list_post.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -29,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: Stack(
         children: [
-          ListPost(),
+          const ListFavoritesCloud(), //ListPost(),
           Positioned(
               left: 20.0,
               bottom: 18.0,
@@ -66,14 +67,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             UserAccountsDrawerHeader(
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(userModel!.photoURL.toString()),
+                  backgroundImage: NetworkImage(userModel?.photoURL ??
+                      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"),
                 ),
-                accountName: Text(
-                  userModel!.name.toString(),
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                accountEmail: Text(userModel!.email.toString(),
-                    style: Theme.of(context).textTheme.bodyLarge)),
+                accountName: Text(userModel?.name ?? 'Nombre del usuario'),
+                accountEmail: Text(userModel?.email ?? 'Correo del usuario')),
             ListTile(
               onTap: () {},
               title: Text(

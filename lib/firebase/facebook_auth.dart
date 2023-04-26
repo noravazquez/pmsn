@@ -16,39 +16,45 @@ class FacebookAuthentication {
             FacebookAuthProvider.credential(accessToken.token);
         final UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(credential);
-        UserModel userModel = UserModel.fromFirebaseUser(userCredential.user!);
-        return userModel;
+        print('User login: ${userCredential.user}');
+        UserModel user = UserModel.fromFirebaseUser(userCredential.user!);
+        return user;
       } else {
         return UserModel(name: null);
       }
     } catch (e) {
+      print('Error signing in with Facebook: $e');
       return UserModel(name: null);
     }
   }
 
-  Future<int> signUpWithFacebook() async {
+  Future<bool> signUpWithFacebook() async {
     this.signOut();
     try {
       final LoginResult result = await _facebookAuth.login();
+
       if (result.status == LoginStatus.success) {
         final AccessToken accessToken = result.accessToken!;
         final OAuthCredential credential =
             FacebookAuthProvider.credential(accessToken.token);
+
+        // Creating a Firebase user with email and password
         final UserCredential userCredential =
             await _firebaseAuth.createUserWithEmailAndPassword(
-                email: accessToken.userId + '@facebook.com',
-                password: accessToken.token);
+          email: accessToken.userId +
+              '@facebook.com', // Using the Facebook user ID as email
+          password:
+              accessToken.token, // Using the Facebook access token as password
+        );
+        // Linking the Facebook credential to the Firebase user
         await userCredential.user!.linkWithCredential(credential);
-        return 1;
+        return true;
       } else {
-        return 3;
+        return false;
       }
     } catch (e) {
-      if (e.toString().contains('already')) {
-        return 2;
-      } else {
-        return 3;
-      }
+      print('Error signing up with Facebook: $e');
+      return false;
     }
   }
 

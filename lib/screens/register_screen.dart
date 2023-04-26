@@ -105,13 +105,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SnackBar(
                       content: Text('Usuario registrado correctamente')),
                 );
-                Navigator.pushNamed(context, '/dash');
+                Navigator.pushNamed(context, '/login');
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text(
                           'Ya existe un usuario registrado con esta cuenta')),
                 );
+                Navigator.pushNamed(context, '/login');
               }
             });
           }
@@ -164,13 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       text: 'Continue with Facebook',
       onPressed: () {
         facebookAuthentication.signUpWithFacebook().then((value) {
-          if (value == 1) {
+          if (value) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Registro exitoso')),
-            );
-          } else if (value == 2) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('La cuenta ya esta registrada')),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
